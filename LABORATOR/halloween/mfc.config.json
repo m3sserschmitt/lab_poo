@@ -1,0 +1,5 @@
+{
+    "target": "halloween",
+    "ignore_paths": [".vscode"],
+    "cc": "g++"
+}

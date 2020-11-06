@@ -1,0 +1,13 @@
+{
+    "target": "notebook",
+    "cc": "g++",
+    "c_flags": [
+        "-c", 
+        "-Wall", 
+        "-I./include"
+    ],
+
+    "ignore_paths": [
+        ".vscode"
+    ]
+}
