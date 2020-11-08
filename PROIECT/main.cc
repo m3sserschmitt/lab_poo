@@ -1,27 +1,49 @@
-#include "events/time.h"
-#include "util/time.h"
-#include "events/date.h"
-#include "events/event.h"
-#include "events/notebook_entry.h"
-#include "data_structures/vector/vector.h"
-#include "data_structures/queue/priority_queue.h"
-#include "events/notebook.h"
+#include "core/include/notebook.h"
 
 #include <iostream>
 
 using namespace std;
 
+void menu()
+{
+    string input;
+    Notebook notebook;
+
+    while (input != "exit")
+    {
+        cout << ">> ";
+        getline(cin, input);
+
+        if (input == "add")
+        {
+            Event e;
+            cin >> e;
+
+            notebook.add(e);
+        }
+        else if (input == "list")
+        {
+            Iterator<Event> it = notebook.begin();
+
+            for (; not it.out_of_range(); it.next())
+            {
+                cout << "#" << it.index() << ": " << it.value() << endl;
+            }
+        }
+        else if (strstr(input.c_str(), "remove"))
+        {
+            strtok((char *)input.c_str(), " ");
+
+            int index = atoi(strtok(NULL, " "));
+
+            notebook.remove(index);
+        }
+    }
+}
+
 int main()
 {
-    Vector<int> u;
-    u << 1 << 3 << 2 << -100 << 0 << 500;
-
-    Vector<int> v = u;
-
-    // u.clear();
-
-    cout << u << endl;
-    cout << v << endl;
-
+    menu();
+    
     return 0;
 }

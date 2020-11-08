@@ -6,10 +6,10 @@ RM=rm -v
 
 all: notebook
 
--include ./include/data_structures/vector/subdir.mk
--include ./src/events/subdir.mk
--include ./src/util/subdir.mk
+-include ./core/src/subdir.mk
+-include ./data_structures/src/vector/subdir.mk
 -include ./subdir.mk
+-include ./util/src/subdir.mk
 -include $(CC_DEPS)
 
 notebook: $(OBJECTS)

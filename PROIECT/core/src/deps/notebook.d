@@ -1,4 +1,4 @@
-./main.o: ./main.cc \
+./core/src/notebook.o: ./core/src/notebook.cc \
 ./core/include/date.h \
 ./core/include/event.h \
 ./core/include/notebook.h \
