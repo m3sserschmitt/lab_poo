@@ -1,0 +1,20 @@
+{
+  "TARGET": "polimorfisme",
+  "CC": "g++",
+  "C_FLAGS": [
+    "-Wall",
+    "-c"
+  ],
+  "LD_FLAGS": [],
+  "EXTENSIONS": [
+    "c",
+    "cc",
+    "cpp"
+  ],
+  "IGNORE_PATHS": [],
+  "CUSTOM_TARGETS": {},
+  "VERBOSE": false,
+  "RM": "rm -v",
+  "BUILD_DIRECTORY": "./build",
+  "BIN_DIRECTORY": "./build/bin"
+}
