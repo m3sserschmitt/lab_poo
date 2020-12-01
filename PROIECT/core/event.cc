@@ -87,30 +87,30 @@ Time Event::get_time()
     return this->time;
 }
 
-// bool Event::operator<(Event &e)
-// {
-//     return this->compare(&e) < 0;
-// }
+bool Event::operator<(Event &e)
+{
+    return this->compare(&e) < 0;
+}
 
-// bool Event::operator>(Event &e)
-// {
-//     return this->compare(&e) > 0;
-// }
+bool Event::operator>(Event &e)
+{
+    return this->compare(&e) > 0;
+}
 
-// bool Event::operator<=(Event &e)
-// {
-//     return not((*this) > e);
-// }
+bool Event::operator<=(Event &e)
+{
+    return not((*this) > e);
+}
 
-// bool Event::operator>=(Event &e)
-// {
-//     return not((*this) < e);
-// }
+bool Event::operator>=(Event &e)
+{
+    return not((*this) < e);
+}
 
-// bool Event::operator==(Event &e)
-// {
-//     return this->name == e.name and not this->compare(&e);
-// }
+bool Event::operator==(Event &e)
+{
+    return this->name == e.name and not this->compare(&e);
+}
 
 ostream &operator<<(ostream &out, Event &event)
 {

@@ -161,7 +161,7 @@ long Collection<T>::resize(size_t size)
 template <class T>
 size_t Collection<T>::get_size()
 {
-    return this->size;
+    return this->current_size;
 }
 
 template <class T>

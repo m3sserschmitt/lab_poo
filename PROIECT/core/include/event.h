@@ -38,11 +38,11 @@ public:
     Date get_date();
     Time get_time();
 
-    // bool operator<(Event &);
-    // bool operator>(Event &);
-    // bool operator<=(Event &);
-    // bool operator>=(Event &);
-    // bool operator==(Event &);
+    bool operator<(Event &);
+    bool operator>(Event &);
+    bool operator<=(Event &);
+    bool operator>=(Event &);
+    bool operator==(Event &);
 
     friend ostream &operator<<(ostream &, Event &);
     friend istream &operator>>(istream &, Event &);

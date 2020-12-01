@@ -8,8 +8,8 @@ class Note: public Event
 protected:
     string description;
 
-    istream &read(istream &in);
-    ostream &show(ostream &out);
+    virtual istream &read(istream &in);
+    virtual ostream &show(ostream &out);
 public:
     Note();
     Note(std::string name);
@@ -17,9 +17,6 @@ public:
 
     void set_description(string description);
     string get_description();
-
-    // friend ostream &operator<<(ostream &, Note *);
-    // friend istream &operator>>(istream &, Note *);
 };
 
 #endif

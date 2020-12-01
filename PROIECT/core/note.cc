@@ -37,13 +37,3 @@ string Note::get_description()
 {
     return this->description;
 }
-
-// ostream &operator<<(ostream &out, Note *note)
-// {
-//     return note->show(out);
-// }
-
-// istream &operator>>(istream &in, Note *note)
-// {
-//     return note->read(in);
-// }

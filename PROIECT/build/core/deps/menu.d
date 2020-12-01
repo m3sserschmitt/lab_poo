@@ -1,4 +1,4 @@
-./main.o: ../main.cc \
+./core/menu.o: ../core/menu.cc \
 ../core/include/date.h \
 ../core/include/event.h \
 ../core/include/menu.h \
@@ -13,5 +13,4 @@
 ../data_structures/iterable/queue/p_priority_queue.h \
 ../data_structures/iterable/queue/priority_queue.h \
 ../data_structures/iterable/queue/queue.h \
-../data_structures/iterable/vector/vector.h \
 ../util/include/mem.h

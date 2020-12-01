@@ -3,108 +3,48 @@
 #include "data_structures/iterable/vector/vector.h"
 #include "data_structures/iterable/queue/queue.h"
 #include "data_structures/iterable/queue/p_priority_queue.h"
+#include "./core/include/menu.h"
 
 #include <iostream>
 #include <list>
 
 using namespace std;
-/*
+
 void menu()
 {
     string input;
     Notebook notebook;
 
-    while (input != "exit")
+    do
     {
         cout << ">> ";
         getline(cin, input);
 
-        if (input == "add")
+        vector<string> arguments = split(input, " ", -1);
+
+        if (arguments[0] == "add")
         {
-            Event e;
-            cin >> e;
-
-            notebook.add(e);
+            add(arguments, notebook);
         }
-        else if (input == "list")
+        else if (arguments[0] == "list")
         {
-            Iterator<Event> it = notebook.begin();
-
-            for (; not it.out_of_range(); it.next())
-            {
-                cout << "#" << it.index() << ": " << it.value() << endl;
-            }
+            list_entries(arguments, notebook);
         }
-        else if (strstr(input.c_str(), "remove"))
+        else if (arguments[0] == "remove")
         {
-            strtok((char *)input.c_str(), " ");
-
-            int index = atoi(strtok(NULL, " "));
-
-            notebook.remove(index);
+            remove(arguments, notebook);
         }
-    }
+        else if (arguments[0] != "exit")
+        {
+            cout << "[-] Error: Unknown command \'" << arguments[0] << "\'.\n";
+        }
+
+    } while (input != "exit");
 }
-*/
-
 
 int main()
 {
-    Notebook notebook;
-
-    // Event *e1 = new Event();
-
-    // cin >> *e1;
-
-    // cout << *e1 << endl;
-
-    cout << "citeste nota: " << endl;
-
-    Note *note = new Note();
-
-    cin >> *note;
-
-    // cout << *note << endl;
-
-    cout << "citeste eveniment: " << endl;
-
-    Event *event = new Event();
-
-    cin >> *event;
-
-    // cout << *event << endl;
-
-    notebook << *event;
-    notebook << *note;
-
-    Iterator<Event *> it = notebook.begin();
-
-    for(; not it.out_of_range(); it.next())
-    {
-        cout << *it.value() << endl;
-    }
-
-    // e1->set_name("event1");
-    // e1->set_date(Date(13, 3, 2021));
-    // e1->set_time(Time(23, 30));
-
-    // Event *e2 = new Event;
-
-    // e2->set_name("event2");
-    // e2->set_date(Date(13, 3, 2021));
-    // e2->set_time(Time(23, 30));
-
-    // notebook.add(e1);
-    // notebook << e2;
-
-    // cout << notebook << endl;
-
-    // Iterator<Event *> it = notebook.begin();
-
-    // for(; not it.out_of_range(); it.next())
-    // {
-    //     cout << *it.value() << endl;
-    // }
+    menu();
 
     return 0;
 }

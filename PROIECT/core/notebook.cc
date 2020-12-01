@@ -26,6 +26,11 @@ void Notebook::remove(size_t index)
     SubscriptableCollection::remove(index);
 }
 
+Vector<Event *> list(Date d)
+{
+
+}
+
 // ssize_t Notebook::search(Event *elem, ssize_t i, ssize_t j, ssize_t *l)
 // {
 //     ssize_t k = (i + j) / 2;
@@ -75,15 +80,15 @@ std::ostream &operator<<(std::ostream &out, Notebook &n)
 
     if (not n.get_size())
     {
-        out << "no events]";
+        out << "no entries]";
     }
     else if (n.get_size() == 1)
     {
-        out << 1 << " event]";
+        out << 1 << " entry]";
     }
     else
     {
-        out << n.get_size() << " events]";
+        out << n.get_size() << " entries]";
     }
 
     return out;
