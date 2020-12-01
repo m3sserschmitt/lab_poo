@@ -1,14 +1,12 @@
 {
-  "TARGET": "notebook",
-  "CC": "g++",
+  "TARGET": "1_decembrie",
+  "CC": "cc",
   "LD": "g++",
   "C_FLAGS": [
     "-c",
     "-Wall"
   ],
   "LD_FLAGS": [],
-  "LIBS": [],
-  "INCLUDE_PATHS": [],
   "EXTENSIONS": [
     "cc"
   ],
@@ -17,5 +15,5 @@
   "VERBOSE": false,
   "RM": "rm -v",
   "BUILD_DIRECTORY": "./build",
-  "BIN_DIRECTORY": "./build"
+  "BIN_DIRECTORY": "./build/bin"
 }

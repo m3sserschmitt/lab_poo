@@ -1,9 +1,11 @@
+#include "../../data_structures/abstract/comparable.h"
+
 #include "time.h"
 
 #ifndef DATE_H
 #define DATE_H
 
-class Date {
+class Date: public Comparable<Date> {
     int day;
     int month;
     int year;
@@ -16,7 +18,10 @@ public:
     Date();
     Date(const Date &date);
     Date(int day, int month, int year);
+
     ~Date();
+
+    int compare(Date *d);
 
     void set_day(int day);
     void set_month(int month);
@@ -33,13 +38,13 @@ public:
 
     void today();
 
-    bool operator<(Date);
-    bool operator>(Date);
-    bool operator<=(Date);
-    bool operator>=(Date);
-    bool operator==(Date);
+    bool operator<(Date &);
+    bool operator>(Date &);
+    bool operator<=(Date &);
+    bool operator>=(Date &);
+    bool operator==(Date &);
 
-    friend ostream &operator<<(ostream &, Date);
+    friend ostream &operator<<(ostream &, Date &);
     friend istream &operator>>(istream &, Date &);
 };
 

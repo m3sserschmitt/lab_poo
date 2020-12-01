@@ -1,11 +1,13 @@
 #ifndef TIME_H
 #define TIME_H
 
+#include "../../data_structures/abstract/comparable.h"
+
 #include <iostream>
 
 using namespace std;
 
-class Time {
+class Time : public Comparable<Time>{
     int seconds;
     int minutes;
     int hours;
@@ -13,8 +15,10 @@ class Time {
     char *timezone;
 public:
     Time();
-    Time(const Time &time);
+    Time(const Time &t);
     Time(int hours, int minutes, int seconds=0);
+
+    int compare(Time *t);
 
     void set_seconds(int seconds);
     void set_minutes(int minutes);
@@ -29,13 +33,13 @@ public:
 
     void now();
 
-    bool operator<(Time);
-    bool operator>(Time);
-    bool operator<=(Time);
-    bool operator>=(Time);
-    bool operator==(Time);
+    bool operator<(Time &);
+    bool operator>(Time &);
+    bool operator<=(Time &);
+    bool operator>=(Time &);
+    bool operator==(Time &);
 
-    friend ostream &operator<<(ostream &out, Time t);
+    friend ostream &operator<<(ostream &out, Time &t);
     friend istream &operator>>(istream &in, Time &t);
 };
 

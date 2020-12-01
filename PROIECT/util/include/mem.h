@@ -4,60 +4,6 @@
 
 #ifndef MEM_H
 #define MEM_H
-/*
-template <class T>
-void allocate_memory(T **to, size_t size)
-{
-    *to = reinterpret_cast<T *>(malloc(size * sizeof(T)));
-    memset(reinterpret_cast<void *>(*to), 0, size * sizeof(T));
-}
-
-template <typename T, typename... Args>
-void memory_cleanup(T t)
-{
-    if (t)
-    {
-        // try
-        // {
-        free(t);
-        // }
-        // catch (const std::exception &e)
-        // {
-        // std::cerr << e.what() << '\n';
-        // }
-    }
-}
-
-template <typename T, typename... Args>
-void memory_cleanup(T t, Args... args)
-{
-    if (t)
-    {
-        // try
-        // {
-        free(t);
-        // }
-        // catch (const std::exception &e)
-        // {
-        // std::cerr << e.what() << '\n';
-        // }
-    }
-
-    memory_cleanup(args...);
-}
-
-template <typename... Args>
-void free_memory(Args... args)
-{
-    try
-    {
-        memory_cleanup(args...);
-    }
-    catch (const char *)
-    {
-    }
-}
-*/
 
 template <class T>
 void allocate_memory(T **dest, size_t size)
@@ -70,11 +16,14 @@ template <class T>
 void free_memory(T *buff)
 {
     // delete allocated buffer;
-    delete[] buff;
+    if(buff)
+    {
+        delete[] buff;
+    }
 }
 
 template <class T>
-void copy_memory(T *dest, T *from, size_t size)
+void copy_memory(T *dest, const T *from, size_t size)
 {
     T *temp;
     // allocate memory for temporary buffer;
