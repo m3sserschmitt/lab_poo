@@ -11,4 +11,5 @@
 ../data_structures/iterable/queue/p_priority_queue.h \
 ../data_structures/iterable/queue/priority_queue.h \
 ../data_structures/iterable/queue/queue.h \
+../data_structures/iterable/vector/vector.h \
 ../util/include/mem.h
