@@ -15,5 +15,5 @@ MasinaInterventie::MasinaInterventie(string marca, string model, string utilizar
 void MasinaInterventie::afisare()
 {
     Automobil::afisare();
-    cout << " locuri: " << this->nr_locuri << " mitraliera: " << this->mitraliera; 
+    cout << ", locuri: " << this->nr_locuri << ", mitraliera: " << this->mitraliera; 
 }

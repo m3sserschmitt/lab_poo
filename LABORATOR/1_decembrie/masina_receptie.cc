@@ -16,5 +16,5 @@ MasinaReceptie::MasinaReceptie(string marca, string model, string utilizare, int
 void MasinaReceptie::afisare()
 {
     Automobil::afisare();
-    cout << " distanta_acustica: " << this->distanta_acustica << " distanta_video: " << this->distanta_video;
+    cout << ", distanta_acustica: " << this->distanta_acustica << ", distanta_video: " << this->distanta_video;
 }

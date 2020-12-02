@@ -16,5 +16,5 @@ Automobil::Automobil(string marca, string model, string utilizare)
 
 void Automobil::afisare()
 {
-    cout << marca << " " << model << " " << utilizare;
+    cout << marca << " " << model << ", utilizare: " << utilizare;
 }

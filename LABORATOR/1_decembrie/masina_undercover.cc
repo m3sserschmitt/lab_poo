@@ -16,5 +16,5 @@ MasinaUndercover::MasinaUndercover(string nume, string model, string utilizare, 
 void MasinaUndercover::afisare()
 {
     Automobil::afisare();
-    cout << " viteza_maxima: " << this->viteza << " nr_gloante: " << this->nr_gloante;
+    cout << ", viteza_maxima: " << this->viteza << ", nr_gloante: " << this->nr_gloante;
 }
