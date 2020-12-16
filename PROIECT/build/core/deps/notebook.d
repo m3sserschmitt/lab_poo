@@ -1,4 +1,6 @@
 ./core/notebook.o: ../core/notebook.cc \
+../core/exceptions/include/exception.h \
+../core/exceptions/include/index_error.h \
 ../core/include/date.h \
 ../core/include/date_range.h \
 ../core/include/entry.h \

@@ -43,10 +43,10 @@ Time::Time(int hours, int minutes, int seconds)
 
 Time::~Time(){}
 
-int Time::compare(Time *t)
+int Time::compare(const Time &t) const
 {
-    Vector<bool> u = {this->hours < t->hours, this->minutes < t->minutes, this->seconds < t->hours};
-    Vector<bool> v = {this->hours > t->hours, this->minutes > t->minutes, this->seconds > t->hours};
+    Vector<bool> u = {this->hours < t.hours, this->minutes < t.minutes, this->seconds < t.hours};
+    Vector<bool> v = {this->hours > t.hours, this->minutes > t.minutes, this->seconds > t.hours};
 
     return u < v ? 1 : -1 * (v < u);
 }
@@ -156,29 +156,16 @@ void Time::now()
     this->set_time(now.tm_hour, now.tm_min, now.tm_sec);
 }
 
-bool Time::operator<(Time &other)
+Time &Time::operator=(const Time &time)
 {
-    return this->compare(&other) < 0;
-}
+    if(this != &time)
+    {
+        this->hours = time.hours;
+        this->minutes = time.minutes;
+        this->seconds = time.seconds;
+    }
 
-bool Time::operator>(Time &other)
-{
-    return this->compare(&other) > 0;
-}
-
-bool Time::operator<=(Time &other)
-{
-    return not((*this) > other);
-}
-
-bool Time::operator>=(Time &other)
-{
-    return not((*this) < other);
-}
-
-bool Time::operator==(Time &other)
-{
-    return not this->compare(&other) and not strcmp(this->timezone, other.get_timezone());
+    return *this;
 }
 
 ostream &operator<<(ostream &out, const Time &t)

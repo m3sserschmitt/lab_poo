@@ -8,7 +8,7 @@ template <class T>
 class PriorityQueue : public Queue<T>
 {
 protected:
-    ssize_t search(T elem, ssize_t i, ssize_t j, ssize_t *l);
+    ssize_t search(T elem, ssize_t i, ssize_t j, ssize_t *l) const;
 
 public:
     PriorityQueue();
@@ -17,10 +17,9 @@ public:
 
     ~PriorityQueue();
 
-    ssize_t search(T elem);
+    ssize_t search(T elem) const;
 
     void add(T elem);
-    // size_t enqueue(T elem);
 
     const T &operator[](size_t index);
 
@@ -46,7 +45,7 @@ template <class T>
 PriorityQueue<T>::~PriorityQueue() {}
 
 template <class T>
-ssize_t PriorityQueue<T>::search(T elem, ssize_t i, ssize_t j, ssize_t *l)
+ssize_t PriorityQueue<T>::search(T elem, ssize_t i, ssize_t j, ssize_t *l) const
 {
     ssize_t k = (i + j) / 2;
 
@@ -84,7 +83,7 @@ ssize_t PriorityQueue<T>::search(T elem, ssize_t i, ssize_t j, ssize_t *l)
 }
 
 template <class T>
-ssize_t PriorityQueue<T>::search(T elem)
+ssize_t PriorityQueue<T>::search(T elem) const
 {
     return this->search(elem, 0, this->current_size - 1, NULL);
 }
@@ -102,13 +101,6 @@ void PriorityQueue<T>::add(T elem)
     this->search(elem, 0, this->current_size - 1, &l);
     SubscriptableCollection<T>::insert(elem, l);
 }
-
-// template <class T>
-// size_t PriorityQueue<T>::enqueue(T elem)
-// {
-//     this->add(elem);
-//     return this->get_size();
-// }
 
 template <class T>
 const T &PriorityQueue<T>::operator[](size_t index)

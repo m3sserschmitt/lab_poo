@@ -18,13 +18,13 @@ public:
 
     Iterator<T> &next();
     Iterator<T> &previous();
-    bool out_of_range();
+    bool out_of_range() const;
 
-    T &value();
-    size_t index();
+    T &value() const;
+    size_t index() const;
 
-    Iterator<T> get_begin();
-    Iterator<T> get_end();
+    Iterator<T> get_begin() const;
+    Iterator<T> get_end() const;
 
     bool operator==(Iterator<T>);
     bool operator!=(Iterator<T>);
@@ -53,7 +53,7 @@ Iterator<T> &Iterator<T>::previous()
 }
 
 template <class T>
-bool Iterator<T>::out_of_range()
+bool Iterator<T>::out_of_range() const
 {
     // cout << "this->pos - this->begin" << this->pos - this->begin << endl;
     // cout << "this->pos - this->end" << this->pos - this->end << endl;
@@ -61,25 +61,25 @@ bool Iterator<T>::out_of_range()
 }
 
 template <class T>
-T &Iterator<T>::value()
+T &Iterator<T>::value() const
 {
     return *this->pos;
 }
 
 template <class T>
-size_t Iterator<T>::index()
+size_t Iterator<T>::index() const
 {
     return this->pos - this->begin;
 }
 
 template <class T>
-Iterator<T> Iterator<T>::get_begin()
+Iterator<T> Iterator<T>::get_begin() const 
 {
     return Iterator<T>(begin, end, begin);
 }
 
 template <class T>
-Iterator<T> Iterator<T>::get_end()
+Iterator<T> Iterator<T>::get_end() const
 {
     return Iterator<T>(begin, end, end);
 }

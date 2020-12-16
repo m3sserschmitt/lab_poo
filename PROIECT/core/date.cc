@@ -47,10 +47,10 @@ Date::~Date()
     delete[] this->ymonth;
 }
 
-int Date::compare(Date *d)
+int Date::compare(const Date &d) const
 {
-    Vector<bool> u = {this->year < d->year, this->month < d->month, this->day < d->day};
-    Vector<bool> v = {this->year > d->year, this->month > d->month, this->day > d->day};
+    Vector<bool> u = {this->year < d.year, this->month < d.month, this->day < d.day};
+    Vector<bool> v = {this->year > d.year, this->month > d.month, this->day > d.day};
 
     return u < v ? 1 : -1 * (v < u);
 }
@@ -144,29 +144,32 @@ void Date::set_date(const char *date)
     this->day = atoi(tokens[0].c_str());
     this->month = atoi(tokens[1].c_str());
     this->year = atoi(tokens[2].c_str());
+
+    get_wday(this->day, this->month, this->year, this->wday);
+    get_ymonth(this->month, this->ymonth);
 }
 
-int Date::get_day()
+int Date::get_day() const
 {
     return this->day;
 }
 
-int Date::get_month()
+int Date::get_month() const
 {
     return this->month;
 }
 
-int Date::get_year()
+int Date::get_year() const
 {
     return this->year;
 }
 
-char *Date::get_weekday()
+const char *Date::get_weekday() const
 {
     return this->wday;
 }
 
-char *Date::get_year_month()
+const char *Date::get_year_month() const
 {
     return this->ymonth;
 }
@@ -178,40 +181,25 @@ void Date::today()
     this->set_date(today.tm_mday, today.tm_mon + 1, today.tm_year + 1900);
 }
 
-bool Date::operator<(Date &d)
+Date &Date::operator=(const Date &date)
 {
-    return this->compare(&d) < 0;
+    if(this != &date)
+    {
+        this->day = date.day;
+        this->month = date.month;
+        this->year = date.year;
+
+        strcpy(this->wday, date.wday);
+        strcpy(this->ymonth, date.ymonth);
+    }
+
+    return *this;
 }
 
-bool Date::operator>(Date &d)
+ostream &operator<<(ostream &out, const Date &date)
 {
-    return this->compare(&d) > 0;
-}
-
-bool Date::operator<=(Date &d)
-{
-    return not((*this) > d);
-}
-
-bool Date::operator>=(Date &d)
-{
-    return not((*this) < d);
-}
-
-bool Date::operator==(Date &d)
-{
-    return not this->compare(&d);
-}
-
-bool Date::operator!=(Date &d)
-{
-    return this->compare(&d);
-}
-
-ostream &operator<<(ostream &out, Date &date)
-{
-    out << date.get_weekday() << ", " << date.get_day() << " " << date.get_year_month() << " ";
-    out << date.get_year();
+    out << date.wday << ", " << date.day << " " << date.ymonth << " ";
+    out << date.year;
 
     return out;
 }

@@ -9,7 +9,7 @@ protected:
     string description;
 
     istream &read(istream &in);
-    ostream &show(ostream &out);
+    ostream &show(ostream &out) const;
 
 public:
     Note();
@@ -17,12 +17,12 @@ public:
     Note(std::string name, std::string description);
     Note(const Note &e);
 
-    int compare(Entry *e);
+    int compare(const Entry &e) const;
 
     void set_description(string description);
-    string get_description();
+    string get_description() const;
 
-    Note &operator=(const Note &note);
+    Note &operator=(const Note &);
 };
 
 #endif

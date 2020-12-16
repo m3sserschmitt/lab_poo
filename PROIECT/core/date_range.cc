@@ -30,12 +30,12 @@ void DateRange::set_end(Date end)
     this->end = end;
 }
 
-Date DateRange::get_begin()
+Date DateRange::get_begin() const
 {
     return this->begin;
 }
 
-Date DateRange::get_end()
+Date DateRange::get_end() const
 {
     return this->end;
 }
@@ -51,7 +51,7 @@ DateRange &DateRange::operator=(const DateRange &range)
     return *this;
 }
 
-ostream &operator<<(ostream &out, DateRange &range)
+ostream &operator<<(ostream &out, const DateRange &range)
 {
     if(range.begin == range.end)
     {

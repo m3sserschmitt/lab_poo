@@ -25,64 +25,43 @@ void Entry::set_date(int day, int month, int year)
 
 void Entry::set_name(std::string name)
 {
-    // cout << "name set ";
     this->name = name;
-    // cout << this->name << "\n";
 }
 
-std::string Entry::get_name()
+std::string Entry::get_name() const
 {
     return this->name;
 }
 
-Date Entry::get_date()
+Date Entry::get_date() const
 {
     return this->date;
 }
 
-bool Entry::operator<(Entry &e)
+bool operator==(const Entry &e1, const Entry &e2)
 {
-    return this->compare(&e) < 0;
-}
-
-bool Entry::operator>(Entry &e)
-{
-    return this->compare(&e) > 0;
-}
-
-bool Entry::operator<=(Entry &e)
-{
-    return not((*this) > e);
-}
-
-bool Entry::operator>=(Entry &e)
-{
-    return not((*this) < e);
-}
-
-bool Entry::operator==(Entry &e)
-{
-    if (typeid(e) == typeid(*this))
+    if (typeid(e1) == typeid(e2))
     {
-        return this->name == e.name and not this->compare(&e);
+        return e1.name == e2.name and not e1.compare(e2);
     }
 
-    Entry *entry = dynamic_cast<Entry *>(&e);
+    Entry *entry = dynamic_cast<Entry *>(&(Entry &)e2);
 
     if (entry)
     {
-        return not this->compare(&e);
+        return not e1.compare(*entry);
     }
 
     return false;
 }
 
-bool Entry::operator!=(Entry &e)
+
+bool operator!=(const Entry &e1, const Entry &e2)
 {
-    return not(*this == e);
+    return not (e1 == e2);
 }
 
-ostream &operator<<(ostream &out, Entry &entry)
+ostream &operator<<(ostream &out, const Entry &entry)
 {
     return entry.show(out);
 }

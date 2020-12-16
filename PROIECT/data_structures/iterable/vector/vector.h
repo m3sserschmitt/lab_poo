@@ -14,7 +14,7 @@ using namespace std;
 template <class T>
 class Vector : public SubscriptableCollection<T>, public Comparable<Vector<T>>
 {
-    int compare(Vector<T> *u, Vector<T> *v, size_t k);
+    int compare(const Vector<T> &v, size_t k) const;
 
 public:
     Vector();
@@ -25,9 +25,9 @@ public:
 
     ~Vector(){};
 
-    int compare(Vector<T> *v);
+    int compare(const Vector<T> &v) const;
 
-    void extend(Vector<T> v);
+    void extend(const Vector<T> &v);
 
     Vector<char> &operator=(const char *s);
     Vector<T> &operator=(Vector<T> &v);
@@ -35,10 +35,10 @@ public:
 
     Vector<T> operator+(Vector<T>);
 
-    bool operator<(Vector<T> &v);
-    bool operator<=(Vector<T> &v);
-    bool operator>(Vector<T> &v);
-    bool operator>=(Vector<T> &v);
+    // bool operator<(Vector<T> &v);
+    // bool operator<=(Vector<T> &v);
+    // bool operator>(Vector<T> &v);
+    // bool operator>=(Vector<T> &v);
 
     friend std::ostream &operator<<(ostream &out, Vector<char> &v);
 };
@@ -56,13 +56,13 @@ template <class T>
 Vector<T>::Vector(const std::initializer_list<T> &l) : SubscriptableCollection<T>(l) {}
 
 template <class T>
-int Vector<T>::compare(Vector<T> *v)
+int Vector<T>::compare(const Vector<T> &v) const
 {
-    return this->compare(this, v, 0);
+    return this->compare(v, 0);
 }
 
 template <class T>
-void Vector<T>::extend(Vector<T> v)
+void Vector<T>::extend(const Vector<T> &v)
 {
     long delta = this->current_size + v.get_size() - this->size;
     if (delta > 0)
@@ -115,52 +115,28 @@ Vector<T> &Vector<T>::operator=(const std::initializer_list<T> &l)
 }
 
 template <class T>
-int Vector<T>::compare(Vector<T> *u, Vector<T> *v, size_t k)
+int Vector<T>::compare(const Vector<T> &v, size_t k) const
 {
-    size_t min_size = min(u->get_size(), v->get_size());
+    size_t min_size = min(this->get_size(), v.get_size());
 
     if(min_size <= k)
     {
         return 0;
     }
-    else if ((*u)[k] < (*v)[k])
+    else if (this->data[k] < v.data[k])
     {
         return -1;
     }
-    else if ((*u)[k] > (*v)[k])
+    else if (this->data[k] > v.data[k])
     {
         return 1;
     }
     else
     {
-        return compare(u, v, k + 1);
+        return compare(v, k + 1);
     }
 
     return 0;
-}
-
-template <class T>
-bool Vector<T>::operator<(Vector<T> &v)
-{
-    return this->compare(this, &v, 0) < 0;
-}
-
-template <class T>
-bool Vector<T>::operator<=(Vector<T> &v)
-{
-    return not(*this > v);
-}
-
-template <class T>
-bool Vector<T>::operator>(Vector<T> &v)
-{
-    return this->compare(this, &v, 0) > 0;
-}
-
-template <class T>
-bool Vector<T>::operator>=(Vector<T> &v)
-{
-    return not(*this < v);
 }
 
 #endif

@@ -14,20 +14,20 @@ class Notebook: public PriorityQueue<Entry *>
 public:
     Notebook();
     Notebook(size_t size);
-    Notebook(const Notebook &n);
+    Notebook(const Notebook &notebook);
 
     void remove(size_t index);
 
-    Date get_first_date();
-    Date get_last_date();
+    Date get_first_date() const;
+    Date get_last_date() const;
 
-    std::list<Entry *> list(Date date);
-    std::list<Entry *> list(DateRange range);
+    std::list<Entry *> list(Date date) const;
+    std::list<Entry *> list(DateRange range) const;
 
-    Notebook &operator=(const Notebook &n);
+    Notebook &operator=(const Notebook &);
 
-    friend Notebook &operator<<(Notebook &n, Entry &e);
-    friend std::ostream &operator<<(std::ostream &out, Notebook &n);
+    friend Notebook &operator<<(Notebook &, Entry &);
+    friend std::ostream &operator<<(std::ostream &, const Notebook &);
 };
 
 #endif

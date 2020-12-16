@@ -35,17 +35,15 @@ public:
     void reserve(size_t size);
     long resize(size_t new_size);
 
-    size_t get_size();
-    bool is_empty();
+    size_t get_size() const;
+    bool is_empty() const;
 
-    Iterator<T> begin();
-    Iterator<T> end();
+    Iterator<T> begin() const;
+    Iterator<T> end() const;
 
     virtual void add(T elem);
-    virtual void remove(size_t) = 0;
 
-    virtual ssize_t search(T) = 0;
-    virtual T get(size_t i) = 0;
+    virtual ssize_t search(T) const = 0;
 
     void clear();
 };
@@ -159,25 +157,25 @@ long Collection<T>::resize(size_t size)
 }
 
 template <class T>
-size_t Collection<T>::get_size()
+size_t Collection<T>::get_size() const
 {
     return this->current_size;
 }
 
 template <class T>
-bool Collection<T>::is_empty()
+bool Collection<T>::is_empty() const
 {
     return not this->current_size;
 }
 
 template <class T>
-Iterator<T> Collection<T>::begin()
+Iterator<T> Collection<T>::begin() const
 {
     return Iterator<T>(this->data, this->data + this->current_size, this->data);
 }
 
 template <class T>
-Iterator<T> Collection<T>::end()
+Iterator<T> Collection<T>::end() const
 {
     return Iterator<T>(this->data, this->data + this->current_size, this->data + this->current_size);
 }

@@ -33,17 +33,17 @@ istream &Event::read(istream &in)
     return in;
 }
 
-ostream &Event::show(ostream &out)
+ostream &Event::show(ostream &out) const
 {
     out << this->name << " on " << this->date << " " << this->time;
 
     return out;
 }
 
-int Event::compare(Entry *e)
+int Event::compare(const Entry &e) const
 {
-    Event *event = dynamic_cast<Event *>(e);
-    Note *note = dynamic_cast<Note *>(e);
+    Event *event = dynamic_cast<Event *>(&(Entry &)e);
+    Note *note = dynamic_cast<Note *>(&(Entry &)e);
 
     Vector<bool> u;
     Vector<bool> v;
@@ -60,8 +60,8 @@ int Event::compare(Entry *e)
     }
     else
     {
-        u = {e->get_date() > this->date};
-        v = {e->get_date() < this->date};
+        u = {e.get_date() > this->date};
+        v = {e.get_date() < this->date};
     }
 
     return u < v ? 1 : -1 * (v < u);
@@ -77,7 +77,7 @@ void Event::set_time(int hours, int minutes, int seconds)
     this->set_time(Time(hours, minutes, seconds));
 }
 
-Time Event::get_time()
+Time Event::get_time() const
 {
     return this->time;
 }

@@ -14,15 +14,15 @@ public:
     DateRange(Date begin, Date end);
     DateRange(const DateRange &range);
 
-    void set_begin(Date d);
-    void set_end(Date d);
+    void set_begin(Date date);
+    void set_end(Date date);
 
-    Date get_begin();
-    Date get_end();
+    Date get_begin() const;
+    Date get_end() const;
 
-    DateRange &operator=(const DateRange &range);
+    DateRange &operator=(const DateRange &);
 
-    friend ostream &operator<<(ostream &out, DateRange &range);
+    friend ostream &operator<<(ostream &, const DateRange &);
 };
 
 #endif

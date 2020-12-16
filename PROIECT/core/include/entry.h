@@ -13,29 +13,25 @@ protected:
     std::string name;
 
     virtual istream &read(istream &in) = 0;
-    virtual ostream &show(ostream &out) = 0;
+    virtual ostream &show(ostream &out) const = 0;
 
 public:
     Entry();
     Entry(std::string name);
-    Entry(const Entry &e);
+    Entry(const Entry &entry);
 
     void set_name(std::string name);
-    std::string get_name();
+    std::string get_name() const;
 
     void set_date(Date date);
     void set_date(int day, int month, int year);
 
-    Date get_date();
+    Date get_date() const;
 
-    bool operator<(Entry &);
-    bool operator>(Entry &);
-    bool operator<=(Entry &);
-    bool operator>=(Entry &);
-    bool operator==(Entry &);
-    bool operator!=(Entry &);
+    friend bool operator==(const Entry &, const Entry &);
+    friend bool operator!=(const Entry &, const Entry &);
 
-    friend ostream &operator<<(ostream &, Entry &);
+    friend ostream &operator<<(ostream &, const Entry &);
     friend istream &operator>>(istream &, Entry &);
 };
 

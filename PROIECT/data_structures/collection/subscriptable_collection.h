@@ -14,8 +14,8 @@ public:
 
     ~SubscriptableCollection() {}
 
-    T get(size_t i);
-    virtual ssize_t search(T);
+    T get(size_t i) const;
+    ssize_t search(T) const;
     
     void insert(T elem, size_t i);
     void remove(size_t i);
@@ -51,13 +51,13 @@ template <class T>
 SubscriptableCollection<T>::SubscriptableCollection(const std::initializer_list<T> &l) : Collection<T>(l) {}
 
 template <class T>
-T SubscriptableCollection<T>::get(size_t i)
+T SubscriptableCollection<T>::get(size_t i) const
 {
     return this->data[i];
 }
 
 template <class T>
-ssize_t SubscriptableCollection<T>::search(T elem)
+ssize_t SubscriptableCollection<T>::search(T elem) const
 {
     Iterator<T> it = this->begin();
 

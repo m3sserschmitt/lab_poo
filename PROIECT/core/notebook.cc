@@ -31,22 +31,22 @@ void Notebook::remove(size_t index)
     SubscriptableCollection::remove(index);
 }
 
-Date Notebook::get_first_date()
+Date Notebook::get_first_date() const
 {
     return this->data[0]->get_date();
 }
 
-Date Notebook::get_last_date()
+Date Notebook::get_last_date() const
 {
     return this->data[this->size - 1]->get_date();
 }
 
-std::list<Entry *> Notebook::list(Date date)
+std::list<Entry *> Notebook::list(Date date) const
 {
     return this->list(DateRange(date));
 }
 
-std::list<Entry *> Notebook::list(DateRange range)
+std::list<Entry *> Notebook::list(DateRange range) const
 {
     Date begin = range.get_begin();
     Date end = range.get_end();
@@ -68,43 +68,43 @@ std::list<Entry *> Notebook::list(DateRange range)
     return entries;
 }
 
-std::ostream &operator<<(std::ostream &out, Notebook &n)
+std::ostream &operator<<(std::ostream &out, const Notebook &notebook)
 {
 
     out << "[Notebook: ";
 
-    if (not n.get_size())
+    if (not notebook.get_size())
     {
         out << "no entries]";
     }
-    else if (n.get_size() == 1)
+    else if (notebook.get_size() == 1)
     {
         out << 1 << " entry]";
     }
     else
     {
-        out << n.get_size() << " entries]";
+        out << notebook.get_size() << " entries]";
     }
 
     return out;
 }
 
-Notebook &operator<<(Notebook &n, Entry &e)
+Notebook &operator<<(Notebook &notebook, Entry &entry)
 {
-    n.add(&e);
-    return n;
+    notebook.add(&entry);
+    return notebook;
 }
 
-Notebook &Notebook::operator=(const Notebook &n)
+Notebook &Notebook::operator=(const Notebook &notebook)
 {
-    if (this != &n)
+    if (this != &notebook)
     {
-        if (this->size < n.size)
+        if (this->size < notebook.size)
         {
-            this->resize(n.size);
+            this->resize(notebook.size);
         }
 
-        this->set_data(n.data, n.current_size);
+        this->set_data(notebook.data, notebook.current_size);
     }
 
     return *this;

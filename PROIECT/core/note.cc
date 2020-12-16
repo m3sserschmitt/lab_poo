@@ -16,10 +16,10 @@ Note::Note(const Note &note) : Entry(note)
     // this->date = note.date;
 }
 
-int Note::compare(Entry *e)
+int Note::compare(const Entry &e) const
 {
-    Note *note = dynamic_cast<Note *>(e);
-    Event *event = dynamic_cast<Event *>(e);
+    Note *note = dynamic_cast<Note *>(&(Entry &)e);
+    Event *event = dynamic_cast<Event *>(&(Entry &)e);
 
     Date d;
 
@@ -38,7 +38,7 @@ int Note::compare(Entry *e)
     }
     else
     {
-        d = e->get_date();
+        d = e.get_date();
     }
 
     return this->date > d ? 1 : -1 * (d > this->date);
@@ -58,7 +58,7 @@ istream &Note::read(istream &in)
     return in;
 }
 
-ostream &Note::show(ostream &out)
+ostream &Note::show(ostream &out) const
 {
     out << this->name << " for " << this->date;
     if (this->description.size())
@@ -74,7 +74,7 @@ void Note::set_description(string description)
     this->description = description;
 }
 
-string Note::get_description()
+string Note::get_description() const
 {
     return this->description;
 }

@@ -23,7 +23,7 @@ public:
 
     ~Time();
 
-    int compare(Time *t);
+    int compare(const Time &t) const;
 
     void set_seconds(int seconds);
     void set_minutes(int minutes);
@@ -39,14 +39,10 @@ public:
 
     void now();
 
-    bool operator<(Time &);
-    bool operator>(Time &);
-    bool operator<=(Time &);
-    bool operator>=(Time &);
-    bool operator==(Time &);
+    Time &operator=(const Time &);
 
-    friend ostream &operator<<(ostream &out, const Time &t);
-    friend istream &operator>>(istream &in, Time &t);
+    friend ostream &operator<<(ostream &, const Time &);
+    friend istream &operator>>(istream &, Time &);
 };
 
 #endif

@@ -7,7 +7,7 @@ template <typename T>
 class PriorityQueue<T *> : public Queue<T *>
 {
 protected:
-    ssize_t search(T *elem, ssize_t i, ssize_t j, ssize_t *l);
+    ssize_t search(T *elem, ssize_t i, ssize_t j, ssize_t *l) const;
     // ssize_t _search(Comparable<T> *elem, ssize_t i, ssize_t j, ssize_t *l);
 
 public:
@@ -17,7 +17,7 @@ public:
 
     ~PriorityQueue(){};
 
-    ssize_t search(T *elem);
+    ssize_t search(T *elem) const;
     void add(T *elem);
 
     const T *operator[](size_t index);
@@ -37,7 +37,7 @@ template <typename T>
 PriorityQueue<T *>::PriorityQueue(const PriorityQueue<T *> &q) : Queue<T *>(q) {}
 
 template <typename T>
-ssize_t PriorityQueue<T *>::search(T *elem, ssize_t i, ssize_t j, ssize_t *l)
+ssize_t PriorityQueue<T *>::search(T *elem, ssize_t i, ssize_t j, ssize_t *l) const
 {
     ssize_t k = (i + j) / 2;
 
@@ -81,7 +81,7 @@ ssize_t PriorityQueue<T *>::search(T *elem, ssize_t i, ssize_t j, ssize_t *l)
 }
 
 template <typename T>
-ssize_t PriorityQueue<T *>::search(T *elem)
+ssize_t PriorityQueue<T *>::search(T *elem) const
 {
     return this->search(elem, 0, this->current_size - 1, NULL);
 }

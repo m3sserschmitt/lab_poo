@@ -22,7 +22,7 @@ public:
 
     ~Date();
 
-    int compare(Date *d);
+    int compare(const Date &date) const;
 
     void set_day(int day);
     void set_month(int month);
@@ -31,25 +31,18 @@ public:
     void set_date(int day, int month, int year);
     void set_date(const char *date);
 
-    int get_day();
-    int get_month();
-    int get_year();
+    int get_day() const;
+    int get_month() const;
+    int get_year() const;
 
-    char *get_weekday();
-    char *get_year_month();
+    const char *get_weekday() const;
+    const char *get_year_month() const;
 
     void today();
 
-    bool operator<(Date &);
-    bool operator>(Date &);
-    bool operator<=(Date &);
-    bool operator>=(Date &);
-    bool operator==(Date &);
-    bool operator!=(Date &);
+    Date &operator=(const Date &);
 
-    friend ostream &operator<<(ostream &, Date &);
-    // friend Date &operator<<(Date &, std::string &);
-
+    friend ostream &operator<<(ostream &, const Date &);
     friend istream &operator>>(istream &, Date &);
 };
 
