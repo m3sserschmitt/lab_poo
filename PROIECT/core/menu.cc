@@ -1,62 +1,24 @@
 #include "./include/menu.h"
 
-vector<string> split(string str, string sep, int max_split)
-{
-    vector<string> tokens;
-
-    size_t sep_pos;
-    int split_index = 0;
-
-    if (!str.size())
-        return tokens;
-
-    tokens.reserve(10);
-
-    do
-    {
-        split_index++;
-        sep_pos = str.find(sep);
-
-        // tokens.resize(tokens.size() + 1);
-        tokens.push_back(str.substr(0, sep_pos));
-        if (sep_pos == string::npos)
-        {
-            // tokens.resize(split_index);
-            return tokens;
-        }
-
-        str = str.substr(sep_pos + sep.size());
-        if (split_index == max_split && str.size())
-        {
-
-            // tokens.resize(tokens.size() + 1);
-            tokens.push_back(str);
-            // tokens.resize(split_index + 1);
-            return tokens;
-        }
-    } while (true);
-
-    return tokens;
-}
 
 void add(vector<string> arguments, Notebook &notebook)
 {
-    Event *e;
+    Entry *entry;
 
     switch (arguments.size())
     {
     case 1:
-        e = new Event();
+        entry = new Event();
         break;
     case 2:
         if (arguments[1] == "event")
         {
-            e = new Event();
+            entry = new Event();
         }
         else if (arguments[1] == "note")
         {
-            e = new Note();
-        } 
+            entry = new Note();
+        }
         else
         {
             cout << "[-] Error: Unknown argument for \'add\' command: \'" << arguments[1] << "\'.\n";
@@ -69,21 +31,47 @@ void add(vector<string> arguments, Notebook &notebook)
         break;
     }
 
-    cin >> *e;
-    notebook << *e;
+    cin >> *entry;
+    notebook << *entry;
 
-    cout << "[+] OK: Entry added.\n"; 
+    cout << "[+] OK: Entry added.\n";
 }
 
 void list_entries(vector<string> arguments, Notebook &notebook)
 {
-    Iterator<Event *> it = notebook.begin();
+    DateRange range;
+    Date begin; 
+    Date end;
 
-    cout << notebook << "\n\n";
-
-    for(; not it.out_of_range(); it.next())
+    switch (arguments.size())
     {
-        cout << "#" << it.index() << " " << *it.value() << "\n\n";
+    case 2:
+        begin.set_date(arguments[1].c_str());
+        end.set_date(arguments[1].c_str());
+        break;
+    case 3:
+        begin.set_date(arguments[1].c_str());
+        end.set_date(arguments[2].c_str());
+        break;
+    default:
+        begin = notebook.get_first_date();
+        end = notebook.get_last_date();
+    }
+
+    range.set_begin(begin);
+    range.set_end(end);
+
+    list<Entry *> entries = notebook.list(range);
+
+    cout << "[+] Listing entries: " << range << ".\n";
+    cout << "[+] " << entries.size() << " in total.\n\n";
+
+    list<Entry *>::iterator b = entries.begin();
+    list<Entry *>::iterator e = entries.end();
+
+    for (size_t i = 0; b != e; i++, b++)
+    {
+        cout << "#" << i << " " << **b << "\n\n";
     }
 }
 

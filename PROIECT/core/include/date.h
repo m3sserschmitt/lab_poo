@@ -17,6 +17,7 @@ class Date: public Comparable<Date> {
 public:
     Date();
     Date(const Date &date);
+    Date(const char *date);
     Date(int day, int month, int year);
 
     ~Date();
@@ -28,6 +29,7 @@ public:
     void set_year(int year);
 
     void set_date(int day, int month, int year);
+    void set_date(const char *date);
 
     int get_day();
     int get_month();
@@ -43,8 +45,11 @@ public:
     bool operator<=(Date &);
     bool operator>=(Date &);
     bool operator==(Date &);
+    bool operator!=(Date &);
 
     friend ostream &operator<<(ostream &, Date &);
+    // friend Date &operator<<(Date &, std::string &);
+
     friend istream &operator>>(istream &, Date &);
 };
 

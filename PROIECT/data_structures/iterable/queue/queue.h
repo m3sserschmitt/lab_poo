@@ -17,11 +17,11 @@ public:
 
     ~Queue();
 
-    size_t enqueue(T elem);
-    T dequeue();
+    // size_t enqueue(T elem);
+    // T dequeue();
 
     void insert(T elem);
-    void remove();
+    T remove();
 
     Queue<T> &operator=(Queue<T> &q);
 };
@@ -41,21 +41,21 @@ Queue<T>::Queue(const std::initializer_list<T> &l) : SubscriptableCollection<T>(
 template <class T>
 Queue<T>::~Queue() {}
 
-template <class T>
-size_t Queue<T>::enqueue(T elem)
-{
-    this->add(elem);
-    return this->get_size();
-}
+// template <class T>
+// size_t Queue<T>::enqueue(T elem)
+// {
+//     this->add(elem);
+//     return this->get_size();
+// }
 
-template <class T>
-T Queue<T>::dequeue()
-{
-    T elem = this->data[0];
-    this->remove(0);
+// template <class T>
+// T Queue<T>::dequeue()
+// {
+//     T elem = this->data[0];
+//     this->remove(0);
 
-    return elem;
-}
+//     return elem;
+// }
 
 template <class T>
 void Queue<T>::insert(T elem)
@@ -64,7 +64,7 @@ void Queue<T>::insert(T elem)
 }
 
 template<class T>
-void Queue<T>::remove()
+T Queue<T>::remove()
 {
     SubscriptableCollection<T>::remove(0);
 }

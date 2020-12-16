@@ -3,16 +3,22 @@
 #include "./include/date.h"
 #include "../util/include/time.h"
 #include "../util/include/mem.h"
+#include "../util/include/util.h"
+#include "./exceptions/include/invalid_date.h"
+
+#include <vector>
 
 Date::Date()
 {
     this->setup();
+
     this->today();
 }
 
 Date::Date(const Date &date)
 {
     this->setup();
+
     this->year = date.year;
     this->month = date.month;
     this->day = date.day;
@@ -21,28 +27,38 @@ Date::Date(const Date &date)
     strcpy(this->ymonth, date.ymonth);
 }
 
+Date::Date(const char *date)
+{
+    this->setup();
+
+    this->set_date(date);
+}
+
 Date::Date(int day, int month, int year)
 {
     this->setup();
+
     this->set_date(day, month, year);
 }
 
 Date::~Date()
 {
+    delete[] this->wday;
+    delete[] this->ymonth;
 }
 
 int Date::compare(Date *d)
 {
     Vector<bool> u = {this->year < d->year, this->month < d->month, this->day < d->day};
     Vector<bool> v = {this->year > d->year, this->month > d->month, this->day > d->day};
-    
+
     return u < v ? 1 : -1 * (v < u);
 }
 
 void Date::setup()
 {
-    allocate_memory(&this->wday, 4);
-    allocate_memory(&this->ymonth, 16);
+    this->wday = new char[4];
+    this->ymonth = new char[4];
 
     this->day = 1;
     this->month = 1;
@@ -51,30 +67,83 @@ void Date::setup()
 
 void Date::set_day(int day)
 {
+    if(not check_date(day, this->month, this->year))
+    {
+        throw InvalidDateError(DATE_OUT_OF_RANGE);
+    }
+
     this->day = day;
+
     get_wday(this->day, this->month, this->year, this->wday);
-    get_ymonth(this->month, this->ymonth);
+    // get_ymonth(this->month, this->ymonth);
 }
 
 void Date::set_month(int month)
 {
+    if(not check_date(this->day, month, this->year))
+    {
+        throw InvalidDateError(DATE_OUT_OF_RANGE);
+    }
+
     this->month = month;
+
     get_wday(this->day, this->month, this->year, this->wday);
     get_ymonth(this->month, this->ymonth);
 }
 
 void Date::set_year(int year)
 {
+    if(not check_date(this->day, this->month, year))
+    {
+        throw InvalidDateError(DATE_OUT_OF_RANGE);
+    }
+
     this->year = year;
+
     get_wday(this->day, this->month, this->year, this->wday);
     get_ymonth(this->month, this->ymonth);
 }
 
 void Date::set_date(int day, int month, int year)
 {
-    this->set_day(day);
-    this->set_month(month);
-    this->set_year(year);
+    if (not check_date(day, month, year))
+    {
+        throw InvalidDateError(DATE_OUT_OF_RANGE);
+    }
+
+    this->day = day;
+    this->month = month;
+    this->year = year;
+
+    get_wday(this->day, this->month, this->year, this->wday);
+    get_ymonth(this->month, this->ymonth);
+}
+
+void Date::set_date(const char *date)
+{
+    vector<string> tokens = split(date, ".", 2);
+
+    if (tokens.size() != 3)
+    {
+        throw InvalidDateError(WRONG_DATE_FORMAT);
+    }
+
+    for(int i = 0; i < 3; i ++)
+    {
+        if(not is_number(tokens[i]))
+        {
+            throw InvalidDateError(BAD_DATE_INPUT);
+        }
+    }
+
+    if (not check_date(date))
+    {
+        throw InvalidDateError(DATE_OUT_OF_RANGE);
+    }
+
+    this->day = atoi(tokens[0].c_str());
+    this->month = atoi(tokens[1].c_str());
+    this->year = atoi(tokens[2].c_str());
 }
 
 int Date::get_day()
@@ -105,6 +174,7 @@ char *Date::get_year_month()
 void Date::today()
 {
     tm today = get_system_time();
+
     this->set_date(today.tm_mday, today.tm_mon + 1, today.tm_year + 1900);
 }
 
@@ -120,17 +190,22 @@ bool Date::operator>(Date &d)
 
 bool Date::operator<=(Date &d)
 {
-    return not ((*this) > d);
+    return not((*this) > d);
 }
 
 bool Date::operator>=(Date &d)
 {
-    return not ((*this) < d);
+    return not((*this) < d);
 }
 
 bool Date::operator==(Date &d)
 {
     return not this->compare(&d);
+}
+
+bool Date::operator!=(Date &d)
+{
+    return this->compare(&d);
 }
 
 ostream &operator<<(ostream &out, Date &date)
@@ -146,9 +221,7 @@ istream &operator>>(istream &in, Date &date)
     string input;
     getline(in, input);
 
-    date.set_day(atoi(strtok((char *)input.c_str(), ".")));
-    date.set_month(atoi(strtok(NULL, ".")));
-    date.set_year(atoi(strtok(NULL, ".")));
+    date.set_date(input.c_str());
 
     return in;
 }

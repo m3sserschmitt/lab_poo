@@ -14,11 +14,11 @@ public:
 
     ~SubscriptableCollection() {}
 
-    virtual T get(size_t i);
+    T get(size_t i);
     virtual ssize_t search(T);
-
-    virtual void insert(T elem, size_t i);
-    virtual void remove(size_t i);
+    
+    void insert(T elem, size_t i);
+    void remove(size_t i);
 
     T &operator[](size_t i);
 

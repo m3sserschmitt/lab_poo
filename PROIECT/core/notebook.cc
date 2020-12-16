@@ -1,5 +1,8 @@
 #include "./include/notebook.h"
 
+#include "./exceptions/include/index_error.h"
+
+
 Notebook::Notebook()
 {
     this->reserve(0);
@@ -14,64 +17,56 @@ Notebook::Notebook(size_t size)
 
 Notebook::Notebook(const Notebook &n)
 {
-    if(this != &n)
-    {
-        this->reserve(n.size);
-        this->set_data(n.data, n.current_size);
-    }
+    this->reserve(n.size);
+    this->set_data(n.data, n.current_size);
 }
 
 void Notebook::remove(size_t index)
 {
+    if(index >= this->current_size)
+    {
+        throw IndexError();
+    }    
+    
     SubscriptableCollection::remove(index);
 }
 
-Vector<Event *> list(Date d)
+Date Notebook::get_first_date()
 {
-
+    return this->data[0]->get_date();
 }
 
-// ssize_t Notebook::search(Event *elem, ssize_t i, ssize_t j, ssize_t *l)
-// {
-//     ssize_t k = (i + j) / 2;
+Date Notebook::get_last_date()
+{
+    return this->data[this->size - 1]->get_date();
+}
 
-//     if (i >= j)
-//     {
-//         if (l)
-//         {
-//             *l = k + (elem->compare(this->data[k]) > 0);
-//             // *l = k + (elem > this->data[k]);
-//         }
+std::list<Entry *> Notebook::list(Date date)
+{
+    return this->list(DateRange(date));
+}
 
-//         return not elem->compare(this->data[k]) ? k : -1;
-//         // return elem == this->data[k] ? k : -1;
-//     }
-//     // else if (elem < this->data[k])
-//     else if(elem->compare(this->data[k]) < 0)
-//     {
-//         return this->search(elem, i, k, l);
-//     }
-//     // else if (elem > this->data[k])
-//     else if (elem->compare(this->data[k]) > 0)
-//     {
-//         return this->search(elem, k + 1, j, l);
-//     }
-//     else
-//     {
-//         if (l)
-//         {
-//             *l = k + 1;
-//         }
+std::list<Entry *> Notebook::list(DateRange range)
+{
+    Date begin = range.get_begin();
+    Date end = range.get_end();
 
-//         // while (k > 0 and this->data[k] == elem and this->data[k - 1] == elem)
-//         while (k > 0 and not elem->compare(this->data[k]) and not elem->compare(this->data[k - 1]))
-//         {
-//             k--;
-//         }
+    Iterator<Entry *> it = this->begin();
 
-//         return k;
-//     }
-// }
+    std::list<Entry *> entries;
+
+    for (; not it.out_of_range(); it.next())
+    {
+        Date current_date = it.value()->get_date();
+
+        if (begin <= current_date and current_date <= end)
+        {
+            entries.push_back(it.value());
+        }
+    }
+
+    return entries;
+}
 
 std::ostream &operator<<(std::ostream &out, Notebook &n)
 {
@@ -94,8 +89,23 @@ std::ostream &operator<<(std::ostream &out, Notebook &n)
     return out;
 }
 
-Notebook &operator<<(Notebook &n, Event &e)
+Notebook &operator<<(Notebook &n, Entry &e)
 {
     n.add(&e);
     return n;
+}
+
+Notebook &Notebook::operator=(const Notebook &n)
+{
+    if (this != &n)
+    {
+        if (this->size < n.size)
+        {
+            this->resize(n.size);
+        }
+
+        this->set_data(n.data, n.current_size);
+    }
+
+    return *this;
 }

@@ -20,7 +20,7 @@ public:
     ssize_t search(T elem);
 
     void add(T elem);
-    size_t enqueue(T elem);
+    // size_t enqueue(T elem);
 
     const T &operator[](size_t index);
 
@@ -103,12 +103,12 @@ void PriorityQueue<T>::add(T elem)
     SubscriptableCollection<T>::insert(elem, l);
 }
 
-template <class T>
-size_t PriorityQueue<T>::enqueue(T elem)
-{
-    this->add(elem);
-    return this->get_size();
-}
+// template <class T>
+// size_t PriorityQueue<T>::enqueue(T elem)
+// {
+//     this->add(elem);
+//     return this->get_size();
+// }
 
 template <class T>
 const T &PriorityQueue<T>::operator[](size_t index)

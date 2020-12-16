@@ -1,4 +1,5 @@
 #include "../data_structures/iterable/vector/vector.h"
+#include "./include/note.h"
 
 #include "./include/event.h"
 
@@ -39,22 +40,31 @@ ostream &Event::show(ostream &out)
     return out;
 }
 
-int Event::compare(Event *e)
+int Event::compare(Entry *e)
 {
-    Vector<bool> u = {this->date < e->date, this->time < e->time};
-    Vector<bool> v = {this->date > e->date, this->time > e->time};
+    Event *event = dynamic_cast<Event *>(e);
+    Note *note = dynamic_cast<Note *>(e);
+
+    Vector<bool> u;
+    Vector<bool> v;
+
+    if (event)
+    {
+        u = {event->date > this->date, event->time > this->time};
+        v = {this->date > event->date, this->time > event->time};
+    }
+    else if (note)
+    {
+        u = {note->get_date() > this->date, 0};
+        v = {note->get_date() < this->date, 1};
+    }
+    else
+    {
+        u = {e->get_date() > this->date};
+        v = {e->get_date() < this->date};
+    }
 
     return u < v ? 1 : -1 * (v < u);
-}
-
-void Event::set_date(Date date)
-{
-    this->date = date;
-}
-
-void Event::set_date(int day, int month, int year)
-{
-    this->set_date(Date(day, month, year));
 }
 
 void Event::set_time(Time time)
@@ -67,57 +77,19 @@ void Event::set_time(int hours, int minutes, int seconds)
     this->set_time(Time(hours, minutes, seconds));
 }
 
-void Event::set_name(std::string name)
-{
-    this->name = name;
-}
-
-std::string Event::get_name()
-{
-    return this->name;
-}
-
-Date Event::get_date()
-{
-    return this->date;
-}
-
 Time Event::get_time()
 {
     return this->time;
 }
 
-bool Event::operator<(Event &e)
+Event &Event::operator=(const Event &event)
 {
-    return this->compare(&e) < 0;
-}
+    if (this != &event)
+    {
+        this->name = event.name;
+        this->date = event.date;
+        this->time = event.time;
+    }
 
-bool Event::operator>(Event &e)
-{
-    return this->compare(&e) > 0;
-}
-
-bool Event::operator<=(Event &e)
-{
-    return not((*this) > e);
-}
-
-bool Event::operator>=(Event &e)
-{
-    return not((*this) < e);
-}
-
-bool Event::operator==(Event &e)
-{
-    return this->name == e.name and not this->compare(&e);
-}
-
-ostream &operator<<(ostream &out, Event &event)
-{
-    return event.show(out);
-}
-
-istream &operator>>(istream &in, Event &event)
-{
-    return event.read(in);
+    return *this;
 }

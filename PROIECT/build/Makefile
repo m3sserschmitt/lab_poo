@@ -9,6 +9,7 @@ RM :=rm -v
 
 all: $(OUT)
 
+-include ./core/exceptions/subdir.mk
 -include ./core/subdir.mk
 -include ./data_structures/iterable/vector/subdir.mk
 -include ./subdir.mk

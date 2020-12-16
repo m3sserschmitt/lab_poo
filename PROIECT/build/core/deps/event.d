@@ -1,6 +1,8 @@
 ./core/event.o: ../core/event.cc \
 ../core/include/date.h \
+../core/include/entry.h \
 ../core/include/event.h \
+../core/include/note.h \
 ../core/include/time.h \
 ../data_structures/abstract/collection.h \
 ../data_structures/abstract/comparable.h \

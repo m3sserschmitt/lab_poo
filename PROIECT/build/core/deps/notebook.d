@@ -1,6 +1,7 @@
 ./core/notebook.o: ../core/notebook.cc \
 ../core/include/date.h \
-../core/include/event.h \
+../core/include/date_range.h \
+../core/include/entry.h \
 ../core/include/notebook.h \
 ../core/include/time.h \
 ../data_structures/abstract/collection.h \

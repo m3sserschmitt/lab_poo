@@ -9,6 +9,42 @@
 const char *WDAYS[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 const char *YMONTHS[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
+bool check_time(int hours, int minutes, int seconds)
+{
+    if (hours < 0 or hours > 23)
+    {
+        return false;
+    }
+
+    if(minutes < 0 or minutes > 59)
+    {
+        return false;
+    }
+
+    if(seconds < 0 or seconds > 59)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool check_date(const char *date)
+{
+    struct tm tm;
+    return strptime(date, "%d.%m.%Y", &tm) == NULL ? false : true;
+}
+
+bool check_date(int day, int month, int year)
+{
+    std::stringstream ss;
+
+    ss << day << "." << month << "." << year;
+    std::string date = ss.str();
+
+    return check_date(date.c_str());
+}
+
 tm get_system_time()
 {
     time_t epoch_time = time(NULL);

@@ -1,5 +1,7 @@
 ./core/menu.o: ../core/menu.cc \
 ../core/include/date.h \
+../core/include/date_range.h \
+../core/include/entry.h \
 ../core/include/event.h \
 ../core/include/menu.h \
 ../core/include/note.h \

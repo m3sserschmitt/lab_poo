@@ -8,6 +8,7 @@ class PriorityQueue<T *> : public Queue<T *>
 {
 protected:
     ssize_t search(T *elem, ssize_t i, ssize_t j, ssize_t *l);
+    // ssize_t _search(Comparable<T> *elem, ssize_t i, ssize_t j, ssize_t *l);
 
 public:
     PriorityQueue();
@@ -17,12 +18,9 @@ public:
     ~PriorityQueue(){};
 
     ssize_t search(T *elem);
-
     void add(T *elem);
-    size_t enqueue(T *elem);
 
     const T *operator[](size_t index);
-
     PriorityQueue<T *> &operator=(PriorityQueue<T *> &q);
 
     template <class t>
@@ -47,78 +45,40 @@ ssize_t PriorityQueue<T *>::search(T *elem, ssize_t i, ssize_t j, ssize_t *l)
     {
         if (l)
         {
-            *l = k + (elem->compare(this->data[k]) > 0);
-            // *l = k + (elem > this->data[k]);
+            // *l = k + (elem->compare(this->data[k]) > 0);
+            // cout << *elem << " > " << *this->data[k] << ": " << (*elem > *this->data[k]) << endl;
+            *l = k + (*elem > *this->data[k]);
         }
 
-        return not elem->compare(this->data[k]) ? k : -1;
-        // return elem == this->data[k] ? k : -1;
+        // return not elem->compare(this->data[k]) ? k : -1;
+        return *elem == *this->data[k] ? k : -1;
     }
-    // else if (elem < this->data[k])
-    else if (elem->compare(this->data[k]) < 0)
+    else if (*elem < *this->data[k])
+    // else if (elem->compare(this->data[k]) < 0)
     {
         return this->search(elem, i, k, l);
     }
-    // else if (elem > this->data[k])
-    else if (elem->compare(this->data[k]) > 0)
+    else if (*elem > *this->data[k])
+    // else if (elem->compare(this->data[k]) > 0)
     {
         return this->search(elem, k + 1, j, l);
     }
     else
     {
-        if (l)
-        {
-            *l = k + 1;
-        }
-
-        // while (k > 0 and this->data[k] == elem and this->data[k - 1] == elem)
-        while (k > 0 and not elem->compare(this->data[k]) and not elem->compare(this->data[k - 1]))
+        while (k > 0 and *this->data[k - 1] >= *elem)
+        // while (k > 0 and not elem->compare(this->data[k]) and not elem->compare(this->data[k - 1]))
         {
             k--;
+        }
+
+        if (l)
+        {
+            *l = k;
         }
 
         return k;
     }
 }
-
-/*
-template <class T>
-ssize_t PriorityQueue<T *>::search(T *elem, ssize_t i, ssize_t j, ssize_t *l)
-{
-    ssize_t k = (i + j) / 2;
-
-    if (i >= j)
-    {
-        if (l)
-        {
-            *l = k + (*elem > *this->data[k]);
-        }
-
-        return *elem == *this->data[k] ? k : -1;
-    }
-    else if (*elem < *this->data[k])
-    {
-        return this->search(elem, i, k, l);
-    }
-    else if (*elem > *this->data[k])
-    {
-        return this->search(elem, k + 1, j, l);
-    }
-    else
-    {
-        if (l)
-        {
-            *l = k + 1;
-        }
-
-        while (k > 0 and *this->data[k] == *elem and *this->data[k - 1] == *elem)
-        {
-            k--;
-        }
-
-        return k;
-    }
-}*/
 
 template <typename T>
 ssize_t PriorityQueue<T *>::search(T *elem)
@@ -137,14 +97,8 @@ void PriorityQueue<T *>::add(T *elem)
 
     ssize_t l;
     this->search(elem, 0, this->current_size - 1, &l);
+    // cout << "current size: " << this->current_size << " insert at index " << l << " element: " << *elem << "\n";
     SubscriptableCollection<T *>::insert(elem, l);
-}
-
-template <typename T>
-size_t PriorityQueue<T *>::enqueue(T *elem)
-{
-    this->add(elem);
-    return this->get_size();
 }
 
 template <typename T>
