@@ -1,4 +1,5 @@
 #include "../data_structures/iterable/vector/vector.h"
+#include "./exceptions/include/exception.h"
 #include "./include/note.h"
 
 #include "./include/event.h"
@@ -24,11 +25,36 @@ istream &Event::read(istream &in)
     cout << "enter name: ";
     getline(in, this->name);
 
-    cout << "enter date (dd.mm.yyyy): ";
-    in >> this->date;
+    while (true)
+    {
+        cout << "enter date (dd.mm.yyyy): ";
+        try
+        {
+            in >> this->date;
+        }
+        catch (const Exception &e)
+        {
+            std::cerr << e.what() << '\n';
+            continue;
+        }
 
-    cout << "enter time (hh:mm or hh:mm:ss): ";
-    in >> this->time;
+        break;
+    }
+
+    while (true)
+    {
+        try
+        {
+            cout << "enter time (hh:mm or hh:mm:ss): ";
+            in >> this->time;
+        }
+        catch (const Exception &e)
+        {
+            std::cerr << e.what() << '\n';
+            continue;
+        }
+        break;
+    }
 
     return in;
 }

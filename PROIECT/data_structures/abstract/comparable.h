@@ -1,5 +1,3 @@
-#include "iterator.h"
-
 #ifndef COMPARABLE_H
 #define COMPARABLE_H
 
@@ -7,15 +5,31 @@ template <class T>
 class Comparable
 {
 public:
+    virtual ~Comparable() = 0;
+
     virtual int compare(const T &) const = 0;
 
-    template <class t> friend bool operator<(const t &, const t &);
-    template <class t> friend bool operator>(const t &, const t &);
-    template <class t> friend bool operator<=(const t &, const t &);
-    template <class t> friend bool operator>=(const t &, const t &);
-    template <class t> friend bool operator==(const t &, const t &);
-    template <class t> friend bool operator!=(const t &, const t &);
+    template <class t>
+    friend bool operator<(const t &, const t &);
+
+    template <class t>
+    friend bool operator>(const t &, const t &);
+
+    template <class t>
+    friend bool operator<=(const t &, const t &);
+
+    template <class t>
+    friend bool operator>=(const t &, const t &);
+
+    template <class t>
+    friend bool operator==(const t &, const t &);
+
+    template <class t>
+    friend bool operator!=(const t &, const t &);
 };
+
+template <class T>
+Comparable<T>::~Comparable() {}
 
 template <class t>
 bool operator<(const t &c1, const t &c2)
@@ -32,13 +46,13 @@ bool operator>(const t &c1, const t &c2)
 template <class t>
 bool operator<=(const t &c1, const t &c2)
 {
-    return not (c1 > c2);
+    return not(c1 > c2);
 }
 
 template <class t>
 bool operator>=(const t &c1, const t &c2)
 {
-    return not (c1 < c2);
+    return not(c1 < c2);
 }
 
 template <class t>
@@ -50,7 +64,7 @@ bool operator==(const t &c1, const t &c2)
 template <class t>
 bool operator!=(const t &c1, const t &c2)
 {
-    return not (c1 == c2);
+    return not(c1 == c2);
 }
 
 #endif

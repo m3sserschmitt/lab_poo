@@ -30,7 +30,7 @@ public:
     Collection(const Collection<T> &c);
     Collection(const std::initializer_list<T> &l);
 
-    ~Collection();
+    virtual ~Collection() = 0;
 
     void reserve(size_t size);
     long resize(size_t new_size);
@@ -42,7 +42,6 @@ public:
     Iterator<T> end() const;
 
     virtual void add(T elem);
-
     virtual ssize_t search(T) const = 0;
 
     void clear();

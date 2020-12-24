@@ -1,6 +1,6 @@
 #include "./include/entry.h"
 
-Entry::Entry(){}
+Entry::Entry() {}
 
 Entry::Entry(std::string name)
 {
@@ -12,6 +12,8 @@ Entry::Entry(const Entry &e)
     this->name = e.name;
     this->date = e.date;
 }
+
+Entry::~Entry() {}
 
 void Entry::set_date(Date date)
 {
@@ -55,10 +57,9 @@ bool operator==(const Entry &e1, const Entry &e2)
     return false;
 }
 
-
 bool operator!=(const Entry &e1, const Entry &e2)
 {
-    return not (e1 == e2);
+    return not(e1 == e2);
 }
 
 ostream &operator<<(ostream &out, const Entry &entry)

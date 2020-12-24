@@ -20,6 +20,8 @@ public:
     Entry(std::string name);
     Entry(const Entry &entry);
 
+    virtual ~Entry() = 0;
+
     void set_name(std::string name);
     std::string get_name() const;
 

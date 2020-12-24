@@ -30,15 +30,10 @@ public:
     void extend(const Vector<T> &v);
 
     Vector<char> &operator=(const char *s);
-    Vector<T> &operator=(Vector<T> &v);
+    Vector<T> &operator=(const Vector<T> &v);
     Vector<T> &operator=(const std::initializer_list<T> &l);
 
-    Vector<T> operator+(Vector<T>);
-
-    // bool operator<(Vector<T> &v);
-    // bool operator<=(Vector<T> &v);
-    // bool operator>(Vector<T> &v);
-    // bool operator>=(Vector<T> &v);
+    Vector<T> operator+(const Vector<T> &v);
 
     friend std::ostream &operator<<(ostream &out, Vector<char> &v);
 };
@@ -79,7 +74,7 @@ void Vector<T>::extend(const Vector<T> &v)
 }
 
 template <class T>
-Vector<T> &Vector<T>::operator=(Vector<T> &v)
+Vector<T> &Vector<T>::operator=(const Vector<T> &v)
 {
     if (this != &v)
     {
@@ -94,7 +89,7 @@ Vector<T> &Vector<T>::operator=(Vector<T> &v)
 }
 
 template <class T>
-Vector<T> Vector<T>::operator+(Vector<T> v)
+Vector<T> Vector<T>::operator+(const Vector<T> &v)
 {
     Vector<int> new_vector = *this;
     new_vector.extend(v);

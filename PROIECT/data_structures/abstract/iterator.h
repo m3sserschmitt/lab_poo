@@ -1,3 +1,5 @@
+#include "comparable.h"
+
 #include <cstddef>
 #include <iostream>
 
@@ -7,7 +9,7 @@ using namespace std;
 #define ITERATOR_H
 
 template <class T>
-class Iterator
+class Iterator : public Comparable<Iterator<T>>
 {
     T *begin;
     T *end;
@@ -15,6 +17,9 @@ class Iterator
 
 public:
     Iterator(T *begin, T *end, T *pos);
+    ~Iterator();
+
+    int compare(const Iterator<T> &) const;
 
     Iterator<T> &next();
     Iterator<T> &previous();
@@ -26,15 +31,11 @@ public:
     Iterator<T> get_begin() const;
     Iterator<T> get_end() const;
 
-    bool operator==(Iterator<T>);
-    bool operator!=(Iterator<T>);
-
-    bool operator<(Iterator<T>);
-    bool operator<=(Iterator<T>);
-
-    bool operator>(Iterator<T>);
-    bool operator>=(Iterator<T>);
+    Iterator<T> &operator=(const Iterator<T> &);
 };
+
+template <class T>
+Iterator<T>::~Iterator() {}
 
 template <class T>
 Iterator<T>::Iterator(T *begin, T *end, T *pos)
@@ -43,6 +44,19 @@ Iterator<T>::Iterator(T *begin, T *end, T *pos)
     this->pos = pos;
 
     this->end = end;
+}
+
+template <class T>
+int Iterator<T>::compare(const Iterator<T> &other) const
+{
+    return this->pos - other.pos;
+}
+
+template <class T>
+Iterator<T> &Iterator<T>::next()
+{
+    this->pos++;
+    return *this;
 }
 
 template <class T>
@@ -55,8 +69,6 @@ Iterator<T> &Iterator<T>::previous()
 template <class T>
 bool Iterator<T>::out_of_range() const
 {
-    // cout << "this->pos - this->begin" << this->pos - this->begin << endl;
-    // cout << "this->pos - this->end" << this->pos - this->end << endl;
     return this->pos < this->begin or this->pos >= this->end;
 }
 
@@ -73,7 +85,7 @@ size_t Iterator<T>::index() const
 }
 
 template <class T>
-Iterator<T> Iterator<T>::get_begin() const 
+Iterator<T> Iterator<T>::get_begin() const
 {
     return Iterator<T>(begin, end, begin);
 }
@@ -85,45 +97,15 @@ Iterator<T> Iterator<T>::get_end() const
 }
 
 template <class T>
-bool Iterator<T>::operator==(Iterator<T> other)
+Iterator<T> &Iterator<T>::operator=(const Iterator<T> &it)
 {
-    return this->pos == (T *)(&other.value());
-}
+    if (this != &it)
+    {
+        this->begin = it.begin;
+        this->end = it.end;
+        this->pos = it.pos;
+    }
 
-template <class T>
-bool Iterator<T>::operator!=(Iterator<T> other)
-{
-    return not(*this == other);
-}
-
-template <class T>
-bool Iterator<T>::operator<(Iterator<T> other)
-{
-    return this->pos < (T *)(&other.value());
-}
-
-template <class T>
-bool Iterator<T>::operator<=(Iterator<T> other)
-{
-    return not(*this > other);
-}
-
-template <class T>
-bool Iterator<T>::operator>(Iterator<T> other)
-{
-    return this->pos > (T *)(&other.value());
-}
-
-template <class T>
-bool Iterator<T>::operator>=(Iterator<T> other)
-{
-    return not(*this < other);
-}
-
-template <class T>
-Iterator<T> &Iterator<T>::next()
-{
-    this->pos++;
     return *this;
 }
 

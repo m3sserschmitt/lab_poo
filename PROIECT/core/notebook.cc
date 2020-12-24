@@ -28,7 +28,8 @@ void Notebook::remove(size_t index)
         throw IndexError();
     }    
     
-    SubscriptableCollection::remove(index);
+    PriorityQueue<Entry *>::remove(index);
+    // SubscriptableCollection::remove(index);
 }
 
 Date Notebook::get_first_date() const

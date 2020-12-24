@@ -1,3 +1,4 @@
+#include "./exceptions/include/exception.h"
 #include "./include/note.h"
 
 Note::Note() : Entry() {}
@@ -11,9 +12,7 @@ Note::Note(std::string name, std::string description) : Entry(name)
 
 Note::Note(const Note &note) : Entry(note)
 {
-    // this->name = note.name;
     this->description = note.description;
-    // this->date = note.date;
 }
 
 int Note::compare(const Entry &e) const
@@ -49,8 +48,20 @@ istream &Note::read(istream &in)
     cout << "enter name: ";
     getline(in, this->name);
 
-    cout << "enter date (dd.mm.yyyy): ";
-    in >> this->date;
+    while (true)
+    {
+        cout << "enter date (dd.mm.yyyy): ";
+        try
+        {
+            in >> this->date;
+        }
+        catch (const Exception &e)
+        {
+            std::cerr << e.what() << '\n';
+            continue;
+        }
+        break;
+    }
 
     cout << "description: ";
     getline(in, this->description);

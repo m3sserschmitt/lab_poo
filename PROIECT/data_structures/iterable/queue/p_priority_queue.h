@@ -8,8 +8,6 @@ class PriorityQueue<T *> : public Queue<T *>
 {
 protected:
     ssize_t search(T *elem, ssize_t i, ssize_t j, ssize_t *l) const;
-    // ssize_t _search(Comparable<T> *elem, ssize_t i, ssize_t j, ssize_t *l);
-
 public:
     PriorityQueue();
     PriorityQueue(size_t size);
@@ -19,12 +17,13 @@ public:
 
     ssize_t search(T *elem) const;
     void add(T *elem);
+    void remove(size_t index);
 
     const T *operator[](size_t index);
-    PriorityQueue<T *> &operator=(PriorityQueue<T *> &q);
+    PriorityQueue<T *> &operator=(const PriorityQueue<T *> &q);
 
     template <class t>
-    friend ostream &operator<<(ostream &out, PriorityQueue<t *> &q);
+    friend ostream &operator<<(ostream &out, const PriorityQueue<t *> &q);
 };
 
 template <typename T>
@@ -102,13 +101,20 @@ void PriorityQueue<T *>::add(T *elem)
 }
 
 template <typename T>
+void PriorityQueue<T *>::remove(size_t index)
+{
+    delete this->data[index];
+    SubscriptableCollection<T *>::remove(index);
+}
+
+template <typename T>
 const T *PriorityQueue<T *>::operator[](size_t index)
 {
     return this->data[index];
 }
 
 template <typename T>
-PriorityQueue<T *> &PriorityQueue<T *>::operator=(PriorityQueue<T *> &q)
+PriorityQueue<T *> &PriorityQueue<T *>::operator=(const PriorityQueue<T *> &q)
 {
     if (this != &q)
     {
@@ -124,7 +130,7 @@ PriorityQueue<T *> &PriorityQueue<T *>::operator=(PriorityQueue<T *> &q)
 }
 
 template <typename t>
-ostream &operator<<(ostream &out, PriorityQueue<t *> &q)
+ostream &operator<<(ostream &out, const PriorityQueue<t *> &q)
 {
     Iterator<t *> it = q.begin();
     Iterator<t *> it_end = q.end();

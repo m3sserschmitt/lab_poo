@@ -22,14 +22,17 @@ public:
 
     T &operator[](size_t i);
 
-    SubscriptableCollection<T> &operator=(SubscriptableCollection<T> &c);
+    SubscriptableCollection<T> &operator=(const SubscriptableCollection<T> &c);
     SubscriptableCollection<T> &operator=(const std::initializer_list<T> &l);
 
-    bool operator==(SubscriptableCollection &c);
-    bool operator!=(SubscriptableCollection &c);
+    template <class t>
+    friend bool operator==(const SubscriptableCollection<t> &, const SubscriptableCollection<t> &);
+    
+    template <class t>
+    friend bool operator!=(const SubscriptableCollection<t> &, const SubscriptableCollection<t> &);
 
     template <class t>
-    friend std::ostream &operator<<(std::ostream &out, SubscriptableCollection<t> &c);
+    friend std::ostream &operator<<(std::ostream &out, const SubscriptableCollection<t> &c);
 
     template <class t>
     friend SubscriptableCollection<t> &operator>>(t elem, SubscriptableCollection<t> &c);
@@ -100,7 +103,7 @@ T &SubscriptableCollection<T>::operator[](size_t i)
 }
 
 template <class T>
-SubscriptableCollection<T> &SubscriptableCollection<T>::operator=(SubscriptableCollection<T> &c)
+SubscriptableCollection<T> &SubscriptableCollection<T>::operator=(const SubscriptableCollection<T> &c)
 {
     if (this != &c)
     {
@@ -128,16 +131,16 @@ SubscriptableCollection<T> &SubscriptableCollection<T>::operator=(const std::ini
     return *this;
 }
 
-template <class T>
-bool SubscriptableCollection<T>::operator==(SubscriptableCollection<T> &q)
+template <class t>
+bool operator==(const SubscriptableCollection<t> &q, const SubscriptableCollection<t> &r)
 {
-    if (this->get_size() != q.get_size())
+    if (q.get_size() != r.get_size())
     {
         return false;
     }
 
-    Iterator<T> u = this->begin();
-    Iterator<T> v = q.begin();
+    Iterator<t> u = q.begin();
+    Iterator<t> v = r.begin();
 
     for (; not u.out_of_range(); u.next(), v.next())
     {
@@ -150,14 +153,14 @@ bool SubscriptableCollection<T>::operator==(SubscriptableCollection<T> &q)
     return true;
 }
 
-template <class T>
-bool SubscriptableCollection<T>::operator!=(SubscriptableCollection<T> &q)
+template <class t>
+bool operator!=(const SubscriptableCollection<t> &q, const SubscriptableCollection<t> &r)
 {
-    return not((*this) == q);
+    return not(q == r);
 }
 
 template <class t>
-std::ostream &operator<<(std::ostream &out, SubscriptableCollection<t> &c)
+std::ostream &operator<<(std::ostream &out, const SubscriptableCollection<t> &c)
 {
     Iterator<t> it = c.begin();
     Iterator<t> it_end = c.end();

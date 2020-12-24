@@ -1,5 +1,6 @@
-#include "./include/menu.h"
+#include "./exceptions/include/exception.h"
 
+#include "./include/menu.h"
 
 void add(vector<string> arguments, Notebook &notebook)
 {
@@ -39,8 +40,14 @@ void add(vector<string> arguments, Notebook &notebook)
 
 void list_entries(vector<string> arguments, Notebook &notebook)
 {
+    if(not notebook.get_size())
+    {
+        cout << "[+] No entries to be listed" << endl;
+        return;
+    }
+
     DateRange range;
-    Date begin; 
+    Date begin;
     Date end;
 
     switch (arguments.size())
@@ -82,7 +89,16 @@ void remove(vector<string> arguments, Notebook &notebook)
     {
     case 2:
         index = atol(arguments[1].c_str());
-        notebook.remove(index);
+
+        try
+        {
+            notebook.remove(index);
+        }
+        catch (const Exception &e)
+        {
+            std::cerr << e.what() << '\n';
+            break;
+        }
 
         cout << "[+] OK: Entry removed." << endl;
         break;
