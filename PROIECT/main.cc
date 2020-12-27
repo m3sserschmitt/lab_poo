@@ -23,6 +23,7 @@ void menu()
 {
     string input;
     Notebook notebook;
+    vector<string> arguments;
 
     do
     {
@@ -34,7 +35,7 @@ void menu()
             continue;
         }
 
-        vector<string> arguments = split(input, " ", -1);
+        arguments = split(input, " ", -1);
 
         if (arguments[0] == "add")
         {
@@ -56,6 +57,10 @@ void menu()
         {
             remove(arguments, notebook);
         }
+        else if(arguments[0] == "clear")
+        {
+            notebook.clear();
+        }
         else if (arguments[0] != "exit")
         {
             cout << "[-] Error: Unknown command \'" << arguments[0] << "\'.\n";
@@ -67,11 +72,6 @@ void menu()
 int main()
 {
     menu();
-
-    // map<string, string> m = {{"Name", "test"}, {"Date", "date"}};
-
-    // cout << m["name"] << endl;
-    // cout << m["Date"] << endl;
 
     return 0;
 }

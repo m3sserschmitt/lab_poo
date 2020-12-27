@@ -1,5 +1,5 @@
 #include "../../data_structures/abstract/comparable.h"
-
+#include "date_range.h"
 #include "date.h"
 
 #include <map>
@@ -10,7 +10,6 @@
 class Entry : public Comparable<Entry>
 {
 protected:
-
     Date date;
     std::string name;
 
@@ -18,7 +17,6 @@ protected:
     virtual std::ifstream &read2(std::ifstream &) = 0;
 
 public:
-
     Entry();
     Entry(std::string name);
     Entry(const Entry &entry);
@@ -32,6 +30,7 @@ public:
     void set_date(int day, int month, int year);
 
     Date get_date() const;
+    bool in_range(const DateRange &range) const;
 
     virtual std::string to_string() const = 0;
     virtual std::string to_string2() const = 0;
@@ -42,7 +41,12 @@ public:
     friend bool operator!=(const Entry &, const Entry &);
 
     friend std::ostream &operator<<(std::ostream &, const Entry &);
-    friend std::ofstream &operator<<(std::ofstream &, const Entry &);
+    friend std::ofstream &operator<<(std::ofstream &out, const Entry &entry)
+    {
+        out << entry.to_string2();
+
+        return out;
+    }
 
     friend std::istream &operator>>(std::istream &, Entry &);
     friend std::ifstream &operator>>(std::ifstream &, Entry &);

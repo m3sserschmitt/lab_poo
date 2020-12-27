@@ -16,6 +16,7 @@ public:
     Notebook(size_t size);
     Notebook(const Notebook &notebook);
 
+    void add(Entry *entry);
     void remove(size_t index);
 
     Date get_first_date() const;

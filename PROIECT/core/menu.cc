@@ -1,10 +1,35 @@
 #include "./exceptions/include/exception.h"
 
 #include "./include/menu.h"
+#include "../util/include/util.h"
 
 #include <fstream>
 
 using namespace std;
+
+static list<Entry *> list_range(vector<string> arguments, int i, const Notebook &notebook, DateRange &range)
+{
+    if (not notebook.get_size())
+    {
+        return {};
+    }
+
+    int argc = arguments.size();
+
+    switch (argc - i)
+    {
+    case 0:
+        range.set(notebook.get_first_date(), notebook.get_last_date());
+        break;
+    case 1:
+        range.set(Date(arguments[i]), Date(arguments[i]));
+        break;
+    default:
+        range.set(Date(arguments[i]), Date(arguments[i + 1]));
+    }
+
+    return notebook.list(range);
+}
 
 void add(vector<string> arguments, Notebook &notebook)
 {
@@ -42,40 +67,7 @@ void add(vector<string> arguments, Notebook &notebook)
     cout << "[+] OK: Entry added.\n";
 }
 
-static list<Entry *> list_range(vector<string> arguments, int i, Notebook &notebook, DateRange &range)
-{
-    if (not notebook.get_size())
-    {
-        return {};
-    }
-
-    Date begin;
-    Date end;
-
-    int argc = arguments.size();
-
-    switch (argc - i)
-    {
-    case 0:
-        begin = notebook.get_first_date();
-        end = notebook.get_last_date();
-        break;
-    case 1:
-        begin.set_date(arguments[i].c_str());
-        end.set_date(arguments[i].c_str());
-        break;
-    default:
-        begin.set_date(arguments[i].c_str());
-        end.set_date(arguments[i + 1].c_str());
-    }
-
-    range.set_begin(begin);
-    range.set_end(end);
-
-    return notebook.list(range);
-}
-
-void list_entries(vector<string> arguments, Notebook &notebook)
+void list_entries(vector<string> arguments, const Notebook &notebook)
 {
     if (arguments.size() > 3)
     {
@@ -84,7 +76,17 @@ void list_entries(vector<string> arguments, Notebook &notebook)
     }
 
     DateRange range;
-    list<Entry *> entries = list_range(arguments, 1, notebook, range);
+    list<Entry *> entries;
+
+    try
+    {
+        entries = list_range(arguments, 1, notebook, range);
+    }
+    catch (const Exception &e)
+    {
+        std::cerr << e.what() << '\n';
+        return;
+    }
 
     if (not entries.size())
     {
@@ -104,7 +106,42 @@ void list_entries(vector<string> arguments, Notebook &notebook)
     }
 }
 
-void export_entries(vector<string> arguments, Notebook &notebook)
+void remove(vector<string> arguments, Notebook &notebook)
+{
+    int index;
+    switch (arguments.size())
+    {
+    case 2:
+        if(not is_number(arguments[1], index))
+        {
+            cout << "[-] Error: Wrong index.\n";
+            return;
+        }
+
+        try
+        {
+            notebook.remove(index);
+        }
+        catch (const Exception &e)
+        {
+            std::cerr << e.what() << '\n';
+            break;
+        }
+
+        cout << "[+] OK: Entry removed." << endl;
+        break;
+    default:
+        cout << "[-] Error: Wrong number of arguments for command \'" << arguments[0] << "\'.\n";
+        break;
+    }
+}
+
+// void clear(Notebook &notebook)
+// {
+
+// }
+
+void import_entries(vector<std::string> arguments, Notebook &notebook)
 {
     if (arguments.size() < 2 or arguments.size() > 4)
     {
@@ -113,7 +150,96 @@ void export_entries(vector<string> arguments, Notebook &notebook)
     }
 
     DateRange range;
-    list<Entry *> entries = list_range(arguments, 2, notebook, range);
+
+    try
+    {
+        switch (arguments.size())
+        {
+        case 2:
+            range.set(Date(1, 1, 1900), Date(31, 12, 3000));
+            break;
+
+        case 3:
+            range = DateRange(Date(arguments[2]));
+            break;
+
+        case 4:
+            range.set(Date(arguments[2]), Date(arguments[3]));
+            break;
+
+        default:
+            cout << "[-] Error: Wrong number of arguments for command \'" << arguments[0] << "\'.\n";
+            return;
+        }
+    }
+    catch (const Exception &e)
+    {
+        std::cerr << e.what() << '\n';
+        return;
+    }
+
+    ifstream file(arguments[1]);
+
+    if (not file.is_open())
+    {
+        cout << "[-] Error: failed to open file \'" << arguments[1] << "\'.\n";
+        return;
+    }
+
+    cout << "[+] Importing: " << range << ".\n";
+
+    size_t count = 0;
+    string input;
+
+    while (getline(file, input))
+    {
+        Entry *entry;
+
+        if (input == "[Note]")
+        {
+            entry = new Note();
+        }
+        else if (input == "[Event]")
+        {
+            entry = new Event();
+        }
+
+        file >> *entry;
+
+        if (entry->in_range(range))
+        {
+            notebook << *entry;
+            count ++;
+        }
+        else
+        {
+            delete entry;
+        }
+    }
+
+    cout << "[+] " << count << " entries imported in total.\n";
+}
+
+void export_entries(vector<string> arguments, const Notebook &notebook)
+{
+    if (arguments.size() < 2 or arguments.size() > 4)
+    {
+        cout << "[-] Error: Wrong number of arguments for command \'" << arguments[0] << "\'.\n";
+        return;
+    }
+
+    DateRange range;
+    list<Entry *> entries;
+
+    try
+    {
+        entries = list_range(arguments, 2, notebook, range);
+    }
+    catch (const Exception &e)
+    {
+        std::cerr << e.what() << '\n';
+        return;
+    }
 
     if (not entries.size())
     {
@@ -141,65 +267,4 @@ void export_entries(vector<string> arguments, Notebook &notebook)
     }
 
     cout << "[+] Done.\n";
-}
-
-void import_entries(vector<std::string> arguments, Notebook &notebook)
-{
-    if (arguments.size() < 2 or arguments.size() > 4)
-    {
-        cout << "[-] Error: Wrong number of arguments for command \'" << arguments[0] << "\'.\n";
-        return;
-    }
-
-    ifstream file(arguments[1]);
-
-    if (not file.is_open())
-    {
-        cout << "[-] Error: failed to open file \'" << arguments[1] << "\'.\n";
-        return;
-    }
-
-    string input;
-    while (getline(file, input))
-    {
-        Entry *entry;
-
-        if (input == "[Note]")
-        {
-            entry = new Note();
-        }
-        else if (input == "[Event]")
-        {
-            entry = new Event();
-        }
-
-        file >> *entry;
-        notebook << *entry;
-    }
-}
-
-void remove(vector<string> arguments, Notebook &notebook)
-{
-    size_t index;
-    switch (arguments.size())
-    {
-    case 2:
-        index = atol(arguments[1].c_str());
-
-        try
-        {
-            notebook.remove(index);
-        }
-        catch (const Exception &e)
-        {
-            std::cerr << e.what() << '\n';
-            break;
-        }
-
-        cout << "[+] OK: Entry removed." << endl;
-        break;
-    default:
-        cout << "[-] Error: Wrong number of arguments for command \'" << arguments[0] << "\'.\n";
-        break;
-    }
 }

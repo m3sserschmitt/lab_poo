@@ -8,16 +8,18 @@ class PriorityQueue<T *> : public Queue<T *>
 {
 protected:
     ssize_t search(T *elem, ssize_t i, ssize_t j, ssize_t *l) const;
+
 public:
     PriorityQueue();
     PriorityQueue(size_t size);
     PriorityQueue(const PriorityQueue<T *> &q);
 
-    ~PriorityQueue(){};
+    ~PriorityQueue();
 
     ssize_t search(T *elem) const;
     void add(T *elem);
     void remove(size_t index);
+    void clear();
 
     const T *operator[](size_t index);
     PriorityQueue<T *> &operator=(const PriorityQueue<T *> &q);
@@ -34,6 +36,12 @@ PriorityQueue<T *>::PriorityQueue(size_t size) : Queue<T *>(size) {}
 
 template <typename T>
 PriorityQueue<T *>::PriorityQueue(const PriorityQueue<T *> &q) : Queue<T *>(q) {}
+
+template <typename T>
+PriorityQueue<T *>::~PriorityQueue()
+{
+    this->clear();
+}
 
 template <typename T>
 ssize_t PriorityQueue<T *>::search(T *elem, ssize_t i, ssize_t j, ssize_t *l) const
@@ -96,7 +104,6 @@ void PriorityQueue<T *>::add(T *elem)
 
     ssize_t l;
     this->search(elem, 0, this->current_size - 1, &l);
-    // cout << "current size: " << this->current_size << " insert at index " << l << " element: " << *elem << "\n";
     SubscriptableCollection<T *>::insert(elem, l);
 }
 
@@ -105,6 +112,17 @@ void PriorityQueue<T *>::remove(size_t index)
 {
     delete this->data[index];
     SubscriptableCollection<T *>::remove(index);
+}
+
+template <typename T>
+void PriorityQueue<T *>::clear()
+{
+    for (size_t i = 0; i < this->current_size; i++)
+    {
+        delete this->data[i];
+    }
+
+    this->current_size = 0;
 }
 
 template <typename T>

@@ -1,5 +1,7 @@
 ./core/event.o: ../core/event.cc \
+../core/exceptions/include/exception.h \
 ../core/include/date.h \
+../core/include/date_range.h \
 ../core/include/entry.h \
 ../core/include/event.h \
 ../core/include/note.h \
@@ -10,4 +12,5 @@
 ../data_structures/abstract/iterator.h \
 ../data_structures/collection/subscriptable_collection.h \
 ../data_structures/iterable/vector/vector.h \
-../util/include/mem.h
+../util/include/mem.h \
+../util/include/util.h

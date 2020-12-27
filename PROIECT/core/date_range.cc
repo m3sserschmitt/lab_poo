@@ -1,15 +1,21 @@
 #include "./include/date_range.h"
-
+#include "./exceptions/include/invalid_range.h"
+#include <iostream>
 DateRange::DateRange() {}
 
-DateRange::DateRange(Date date)
+DateRange::DateRange(const Date &date)
 {
     this->begin = date;
     this->end = date;
 }
 
-DateRange::DateRange(Date begin, Date end)
+DateRange::DateRange(const Date &begin, const Date &end)
 {
+    if (begin > end)
+    {
+        throw InvalidDateRange(BAD_RANGE_LIMITS);
+    }
+
     this->begin = begin;
     this->end = end;
 }
@@ -20,13 +26,24 @@ DateRange::DateRange(const DateRange &range)
     this->end = range.end;
 }
 
-void DateRange::set_begin(Date begin)
+void DateRange::set_begin(const Date &begin)
 {
     this->begin = begin;
 }
 
-void DateRange::set_end(Date end)
+void DateRange::set_end(const Date &end)
 {
+    this->end = end;
+}
+
+void DateRange::set(const Date &begin, const Date &end)
+{
+    if (begin > end)
+    {
+        throw InvalidDateRange(BAD_RANGE_LIMITS);
+    }
+
+    this->begin = begin;
     this->end = end;
 }
 
@@ -42,7 +59,7 @@ Date DateRange::get_end() const
 
 DateRange &DateRange::operator=(const DateRange &range)
 {
-    if(this != &range)
+    if (this != &range)
     {
         this->begin = range.begin;
         this->end = range.end;
@@ -53,7 +70,11 @@ DateRange &DateRange::operator=(const DateRange &range)
 
 std::ostream &operator<<(std::ostream &out, const DateRange &range)
 {
-    if(range.begin == range.end)
+    if (range.begin == Date(1, 1, 1900) and range.end == Date(31, 12, 3000))
+    {
+        out << "all";
+    }
+    else if (range.begin == range.end)
     {
         out << range.begin;
     }

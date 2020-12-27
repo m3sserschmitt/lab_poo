@@ -50,7 +50,7 @@ public:
 template <class T>
 Collection<T>::Collection()
 {
-    this->reserve(0);
+    this->reserve(1);
     this->current_size = 0;
 }
 
@@ -78,7 +78,8 @@ Collection<T>::Collection(const std::initializer_list<T> &l)
 template <class T>
 Collection<T>::~Collection()
 {
-    free_memory(this->data);
+    delete[] this->data;
+    // free_memory(this->data);
 }
 
 template <class T>
@@ -141,18 +142,25 @@ void Collection<T>::reserve(size_t size)
     this->size = size;
     this->current_size = 0;
 
-    allocate_memory(&this->data, size);
+    this->data = new T[size];
+    // allocate_memory(&this->data, size);
 }
 
 template <class T>
 long Collection<T>::resize(size_t size)
 {
-    T *old = this->data;
+    if (this->data != NULL)
+    {
+        T *old = this->data;
 
-    this->data = realloc_memory(this->data, this->size, size);
-    this->size = size;
+        this->data = realloc_memory(this->data, this->size, size);
+        this->size = size;
 
-    return this->data - old;
+        return this->data - old;
+    }
+    
+    this->reserve(size);
+    return 0;
 }
 
 template <class T>
@@ -195,7 +203,8 @@ void Collection<T>::add(T elem)
 template <class T>
 void Collection<T>::clear()
 {
-    free_memory(this->data);
+    delete[] this->data;
+    // free_memory(this->data);
     this->current_size = 0;
     this->data = NULL;
 }

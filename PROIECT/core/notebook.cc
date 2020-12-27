@@ -1,6 +1,7 @@
 #include "./include/notebook.h"
 
 #include "./exceptions/include/index_error.h"
+#include "./exceptions/include/invalid_range.h"
 
 
 Notebook::Notebook()
@@ -21,6 +22,21 @@ Notebook::Notebook(const Notebook &n)
     this->set_data(n.data, n.current_size);
 }
 
+void Notebook::add(Entry *entry)
+{
+    if (not this->current_size)
+    {
+        SubscriptableCollection<Entry *>::insert(entry, 0);
+        return;
+    }
+
+    ssize_t l;
+    if(this->search(entry, 0, this->current_size - 1, &l) < 0)
+    {
+        SubscriptableCollection<Entry *>::insert(entry, l);
+    }
+}
+
 void Notebook::remove(size_t index)
 {
     if(index >= this->current_size)
@@ -39,7 +55,7 @@ Date Notebook::get_first_date() const
 
 Date Notebook::get_last_date() const
 {
-    return this->data[this->size - 1]->get_date();
+    return this->data[this->current_size - 1]->get_date();
 }
 
 std::list<Entry *> Notebook::list(Date date) const
@@ -52,8 +68,12 @@ std::list<Entry *> Notebook::list(DateRange range) const
     Date begin = range.get_begin();
     Date end = range.get_end();
 
-    Iterator<Entry *> it = this->begin();
+    if(begin > end)
+    {
+        throw InvalidDateRange(BAD_RANGE_LIMITS);
+    }
 
+    Iterator<Entry *> it = this->begin();
     std::list<Entry *> entries;
 
     for (; not it.out_of_range(); it.next())

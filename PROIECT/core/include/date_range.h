@@ -10,12 +10,13 @@ class DateRange
 
 public:
     DateRange();
-    DateRange(Date date);
-    DateRange(Date begin, Date end);
+    DateRange(const Date &date);
+    DateRange(const Date &begin, const Date &end);
     DateRange(const DateRange &range);
 
-    void set_begin(Date date);
-    void set_end(Date date);
+    void set_begin(const Date &date);
+    void set_end(const Date &date);
+    void set(const Date &begin, const Date &end);
 
     Date get_begin() const;
     Date get_end() const;

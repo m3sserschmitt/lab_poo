@@ -6,7 +6,9 @@
     "-c",
     "-Wall"
   ],
-  "LD_FLAGS": [],
+  "LD_FLAGS": [
+    "-static"
+  ],
   "LIBS": [],
   "INCLUDE_PATHS": [],
   "EXTENSIONS": [

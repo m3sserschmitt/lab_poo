@@ -18,7 +18,7 @@ class Time : public Comparable<Time>
 public:
     Time();
     Time(const Time &t);
-    Time(const char *time);
+    Time(const std::string &time);
     Time(int hours, int minutes, int seconds = 0);
 
     ~Time();
@@ -30,7 +30,7 @@ public:
     void set_hours(int hours);
 
     void set_time(int hours, int minutes, int seconds = 0);
-    void set_time(std::string time);
+    void set_time(const std::string &time);
 
     int get_seconds() const;
     int get_minutes() const;
@@ -43,7 +43,12 @@ public:
     Time &operator=(const Time &);
 
     friend std::ostream &operator<<(std::ostream &, const Time &);
-    friend std::ofstream &operator<<(std::ofstream &, const Time &);
+    friend std::ofstream &operator<<(std::ofstream &out, const Time &time)
+    {
+        out << time.to_string();
+
+        return out;
+    }
 
     friend std::istream &operator>>(std::istream &, Time &);
     friend std::ifstream &operator>>(std::ifstream &, Time &);

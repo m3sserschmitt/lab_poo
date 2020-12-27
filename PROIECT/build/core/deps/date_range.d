@@ -1,6 +1,6 @@
 ./core/date_range.o: ../core/date_range.cc \
+../core/exceptions/include/exception.h \
+../core/exceptions/include/invalid_range.h \
 ../core/include/date.h \
 ../core/include/date_range.h \
-../core/include/time.h \
-../data_structures/abstract/comparable.h \
-../data_structures/abstract/iterator.h
+../data_structures/abstract/comparable.h

@@ -1,4 +1,5 @@
 ./core/menu.o: ../core/menu.cc \
+../core/exceptions/include/exception.h \
 ../core/include/date.h \
 ../core/include/date_range.h \
 ../core/include/entry.h \
@@ -16,4 +17,5 @@
 ../data_structures/iterable/queue/priority_queue.h \
 ../data_structures/iterable/queue/queue.h \
 ../data_structures/iterable/vector/vector.h \
-../util/include/mem.h
+../util/include/mem.h \
+../util/include/util.h

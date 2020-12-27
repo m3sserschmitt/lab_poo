@@ -30,7 +30,7 @@ Time::Time(const Time &time)
     get_system_timezone(timezone);
 }
 
-Time::Time(const char *time)
+Time::Time(const string &time)
 {
     this->set_time(time);
     get_system_timezone(timezone);
@@ -94,12 +94,11 @@ void Time::set_time(int hours, int minutes, int seconds)
     this->seconds = seconds;
 }
 
-void Time::set_time(string time)
+void Time::set_time(const string &time)
 {
     vector<string> tokens = split(time, " ", 1);
-    time = tokens[0];
-
-    tokens = split(time, ":", 2);
+    tokens = split(tokens[0], ":", 2);
+    
     size_t n = tokens.size();
 
     if (n != 3 and n != 2)
@@ -189,12 +188,14 @@ ostream &operator<<(ostream &out, const Time &time)
     return out;
 }
 
+/*
 ofstream &operator<<(ofstream &out, const Time &time)
 {
     out << time.to_string();
 
     return out;
 }
+*/
 
 istream &operator>>(istream &in, Time &time)
 {

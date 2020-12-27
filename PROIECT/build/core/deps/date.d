@@ -2,7 +2,6 @@
 ../core/exceptions/include/exception.h \
 ../core/exceptions/include/invalid_date.h \
 ../core/include/date.h \
-../core/include/time.h \
 ../data_structures/abstract/collection.h \
 ../data_structures/abstract/comparable.h \
 ../data_structures/abstract/iterable.h \

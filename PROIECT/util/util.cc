@@ -55,14 +55,20 @@ bool is_number(std::string str, int &n)
         return false;
 
     n = 0;
-    int s = str.size() - 1;
+    int s = (int)str.size() - 1;
 
-    for (int i = 0; i <= s ; i ++)
+    for (int i = s; i >= 0; i--)
     {
         int c = (int)str[i];
 
         if (c < 48 || c > 57)
         {
+            if (s and not i and str[i] == '-')
+            {
+                n *= -1;
+                return true;
+            }
+
             n = 0;
             return false;
         }

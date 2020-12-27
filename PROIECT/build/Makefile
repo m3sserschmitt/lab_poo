@@ -19,7 +19,7 @@ all: $(OUT)
 $(OUT): $(OBJECTS)
 	@echo Building target: "$@".
 	@echo Invoking $(LD) Linker ...
-	$(LD) $(OBJECTS) $(LIBS)  -o $(OUT)
+	$(LD) $(OBJECTS) $(LIBS) -static -o $(OUT)
 	@echo Target $(TARGET) build successfully.
 	@echo Done.
 

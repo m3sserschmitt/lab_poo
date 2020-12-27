@@ -1,11 +1,11 @@
 ./core/notebook.o: ../core/notebook.cc \
 ../core/exceptions/include/exception.h \
 ../core/exceptions/include/index_error.h \
+../core/exceptions/include/invalid_range.h \
 ../core/include/date.h \
 ../core/include/date_range.h \
 ../core/include/entry.h \
 ../core/include/notebook.h \
-../core/include/time.h \
 ../data_structures/abstract/collection.h \
 ../data_structures/abstract/comparable.h \
 ../data_structures/abstract/iterable.h \

@@ -31,7 +31,7 @@ Date::Date(const Date &date)
     strcpy(this->ymonth, date.ymonth);
 }
 
-Date::Date(const char *date)
+Date::Date(const string &date)
 {
     this->setup();
 
@@ -123,7 +123,7 @@ void Date::set_date(int day, int month, int year)
     get_ymonth(this->month, this->ymonth);
 }
 
-void Date::set_date(string date)
+void Date::set_date(const string &date)
 {
     vector<string> tokens = split(date, ".", 2);
 
@@ -236,14 +236,14 @@ ostream &operator<<(ostream &out, const Date &date)
 
     return out;
 }
-
+/*
 ofstream &operator<<(ofstream &out, const Date &date)
 {
     out << date.to_string();
 
     return out;
 }
-
+*/
 istream &operator>>(istream &in, Date &date)
 {
     string input;

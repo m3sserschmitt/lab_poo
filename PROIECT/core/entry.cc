@@ -45,6 +45,11 @@ Date Entry::get_date() const
     return this->date;
 }
 
+bool Entry::in_range(const DateRange &range) const
+{
+    return this->date >= range.get_begin() and this->date <= range.get_end();
+}
+
 void Entry::read_map(ifstream &in, map<string, string> &m)
 {
     string data;
@@ -94,13 +99,14 @@ ostream &operator<<(ostream &out, const Entry &entry)
     return out;
 }
 
+/*
 ofstream &operator<<(ofstream &out, const Entry &entry)
 {
     out << entry.to_string2();
 
     return out;
 }
-
+*/
 istream &operator>>(istream &in, Entry &entry)
 {
     return entry.read(in);

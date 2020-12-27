@@ -1,16 +1,19 @@
 #include "./include/time.h"
 #include "./include/mem.h"
+#include "./include/util.h"
 
 #include <time.h>
 #include <string.h>
 #include <sstream>
 #include <iomanip>
 #include <string>
+#include <vector>
 
 using namespace std;
 
-const char *WDAYS[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
-const char *YMONTHS[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+static const char *WDAYS[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+static const char *YMONTHS[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+static const int daysc[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 bool check_time(int hours, int minutes, int seconds)
 {
@@ -32,20 +35,66 @@ bool check_time(int hours, int minutes, int seconds)
     return true;
 }
 
-bool check_date(const char *date)
-{
-    struct tm tm;
-    return strptime(date, "%d.%m.%Y", &tm) == NULL ? false : true;
-}
-
 bool check_date(int day, int month, int year)
 {
-    std::stringstream ss;
+    if (1900 > year or year > 3000)
+    {
+        return false;
+    }
 
-    ss << day << "." << month << "." << year;
-    std::string date = ss.str();
+    if (month > 12 or month < 1)
+    {
+        return false;
+    }
 
-    return check_date(date.c_str());
+    int days = daysc[month - 1];
+
+    if (month == 2)
+    {
+        if (year % 4)
+        {
+            days = 28;
+        }
+        else if (year % 100)
+        {
+            days = 29;
+        }
+        else if (year % 400)
+        {
+            days = 28;
+        }else 
+        {
+            days = 29;
+        }
+    }
+
+    if(day < 1 or day > days)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool check_date(const char *date)
+{
+    vector<string> tokens = split(date, ".", 2);
+
+    if (tokens.size() != 3)
+    {
+        return false;
+    }
+
+    int day;
+    int month;
+    int year;
+
+    if (not is_number(tokens[0], day) or not is_number(tokens[1], month) or not is_number(tokens[2], year))
+    {
+        return false;
+    }
+
+    return check_date(day, month, year);
 }
 
 tm get_system_time()
@@ -86,7 +135,7 @@ bool get_ymonth(string ymonth, int &month)
     for (int i = 0; i < 12; i++)
     {
         int c = (int)ymonth[i];
-        
+
         if (i == 0 and c >= 97 and c <= 122)
         {
             c -= 32;
