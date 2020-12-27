@@ -5,6 +5,9 @@
 #include <string.h>
 #include <sstream>
 #include <iomanip>
+#include <string>
+
+using namespace std;
 
 const char *WDAYS[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 const char *YMONTHS[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -16,12 +19,12 @@ bool check_time(int hours, int minutes, int seconds)
         return false;
     }
 
-    if(minutes < 0 or minutes > 59)
+    if (minutes < 0 or minutes > 59)
     {
         return false;
     }
 
-    if(seconds < 0 or seconds > 59)
+    if (seconds < 0 or seconds > 59)
     {
         return false;
     }
@@ -55,7 +58,7 @@ time_t create_time_from_date(int day, int month, int year)
 {
     tm time_in = {0, 0, 0,                      // second, minute, hour
                   day, month - 1, year - 1900}; // 1-based day, 0-based month, year since 1900
-    
+
     return mktime(&time_in);
 }
 
@@ -76,6 +79,34 @@ void get_ymonth(int month, char *ymonth)
     {
         strcpy(ymonth, YMONTHS[month - 1]);
     }
+}
+
+bool get_ymonth(string ymonth, int &month)
+{
+    for (int i = 0; i < 12; i++)
+    {
+        int c = (int)ymonth[i];
+        
+        if (i == 0 and c >= 97 and c <= 122)
+        {
+            c -= 32;
+            ymonth[i] = (char)c;
+        }
+        else if (i >= 1 and c >= 65 and c <= 90)
+        {
+            c += 32;
+            ymonth[i] = (char)c;
+        }
+
+        if (not strcmp(YMONTHS[i], ymonth.c_str()))
+        {
+            month = i + 1;
+            return true;
+        }
+    }
+
+    month = 0;
+    return false;
 }
 
 void get_system_timezone(char *timezone)

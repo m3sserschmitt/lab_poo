@@ -2,6 +2,10 @@
 
 #include "./include/menu.h"
 
+#include <fstream>
+
+using namespace std;
+
 void add(vector<string> arguments, Notebook &notebook)
 {
     Entry *entry;
@@ -38,37 +42,55 @@ void add(vector<string> arguments, Notebook &notebook)
     cout << "[+] OK: Entry added.\n";
 }
 
-void list_entries(vector<string> arguments, Notebook &notebook)
+static list<Entry *> list_range(vector<string> arguments, int i, Notebook &notebook, DateRange &range)
 {
-    if(not notebook.get_size())
+    if (not notebook.get_size())
     {
-        cout << "[+] No entries to be listed" << endl;
-        return;
+        return {};
     }
 
-    DateRange range;
     Date begin;
     Date end;
 
-    switch (arguments.size())
+    int argc = arguments.size();
+
+    switch (argc - i)
     {
-    case 2:
-        begin.set_date(arguments[1].c_str());
-        end.set_date(arguments[1].c_str());
-        break;
-    case 3:
-        begin.set_date(arguments[1].c_str());
-        end.set_date(arguments[2].c_str());
-        break;
-    default:
+    case 0:
         begin = notebook.get_first_date();
         end = notebook.get_last_date();
+        break;
+    case 1:
+        begin.set_date(arguments[i].c_str());
+        end.set_date(arguments[i].c_str());
+        break;
+    default:
+        begin.set_date(arguments[i].c_str());
+        end.set_date(arguments[i + 1].c_str());
     }
 
     range.set_begin(begin);
     range.set_end(end);
 
-    list<Entry *> entries = notebook.list(range);
+    return notebook.list(range);
+}
+
+void list_entries(vector<string> arguments, Notebook &notebook)
+{
+    if (arguments.size() > 3)
+    {
+        cout << "[-] Error: Wrong number of arguments for command \'" << arguments[0] << "\'.\n";
+        return;
+    }
+
+    DateRange range;
+    list<Entry *> entries = list_range(arguments, 1, notebook, range);
+
+    if (not entries.size())
+    {
+        cout << "[+] No entries to be listed\n";
+        return;
+    }
 
     cout << "[+] Listing entries: " << range << ".\n";
     cout << "[+] " << entries.size() << " in total.\n\n";
@@ -79,6 +101,80 @@ void list_entries(vector<string> arguments, Notebook &notebook)
     for (size_t i = 0; b != e; i++, b++)
     {
         cout << "#" << i << " " << **b << "\n\n";
+    }
+}
+
+void export_entries(vector<string> arguments, Notebook &notebook)
+{
+    if (arguments.size() < 2 or arguments.size() > 4)
+    {
+        cout << "[-] Error: Wrong number of arguments for command \'" << arguments[0] << "\'.\n";
+        return;
+    }
+
+    DateRange range;
+    list<Entry *> entries = list_range(arguments, 2, notebook, range);
+
+    if (not entries.size())
+    {
+        cout << "[+] No entries to be listed\n";
+        return;
+    }
+
+    ofstream file(arguments[1]);
+
+    if (not file.is_open())
+    {
+        cout << "[-] Error: failed to open file \'" << arguments[1] << "\'.\n";
+        return;
+    }
+
+    cout << "[+] Exporting entries into file \'" << arguments[1] << "\': " << range << ".\n";
+    cout << "[+] " << entries.size() << " in total.\n\n";
+
+    list<Entry *>::iterator b = entries.begin();
+    list<Entry *>::iterator e = entries.end();
+
+    for (size_t i = 0; b != e; i++, b++)
+    {
+        file << **b << "\n\n";
+    }
+
+    cout << "[+] Done.\n";
+}
+
+void import_entries(vector<std::string> arguments, Notebook &notebook)
+{
+    if (arguments.size() < 2 or arguments.size() > 4)
+    {
+        cout << "[-] Error: Wrong number of arguments for command \'" << arguments[0] << "\'.\n";
+        return;
+    }
+
+    ifstream file(arguments[1]);
+
+    if (not file.is_open())
+    {
+        cout << "[-] Error: failed to open file \'" << arguments[1] << "\'.\n";
+        return;
+    }
+
+    string input;
+    while (getline(file, input))
+    {
+        Entry *entry;
+
+        if (input == "[Note]")
+        {
+            entry = new Note();
+        }
+        else if (input == "[Event]")
+        {
+            entry = new Event();
+        }
+
+        file >> *entry;
+        notebook << *entry;
     }
 }
 

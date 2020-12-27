@@ -1,8 +1,13 @@
 #include "./include/entry.h"
+#include "../util/include/util.h"
+
+#include <vector>
+
+using namespace std;
 
 Entry::Entry() {}
 
-Entry::Entry(std::string name)
+Entry::Entry(string name)
 {
     this->name = name;
 }
@@ -25,12 +30,12 @@ void Entry::set_date(int day, int month, int year)
     this->set_date(Date(day, month, year));
 }
 
-void Entry::set_name(std::string name)
+void Entry::set_name(string name)
 {
     this->name = name;
 }
 
-std::string Entry::get_name() const
+string Entry::get_name() const
 {
     return this->name;
 }
@@ -38,6 +43,26 @@ std::string Entry::get_name() const
 Date Entry::get_date() const
 {
     return this->date;
+}
+
+void Entry::read_map(ifstream &in, map<string, string> &m)
+{
+    string data;
+    vector<string> tokens;
+    
+    do
+    {
+        getline(in, data);
+        tokens = split(data, ":", 1);
+
+        if (tokens.size() == 2)
+        {
+            strip(tokens[0], " ");
+            strip(tokens[1], " ");
+
+            m[tokens[0]] = tokens[1];
+        }
+    } while (data.size());
 }
 
 bool operator==(const Entry &e1, const Entry &e2)
@@ -64,10 +89,24 @@ bool operator!=(const Entry &e1, const Entry &e2)
 
 ostream &operator<<(ostream &out, const Entry &entry)
 {
-    return entry.show(out);
+    out << entry.to_string();
+
+    return out;
+}
+
+ofstream &operator<<(ofstream &out, const Entry &entry)
+{
+    out << entry.to_string2();
+
+    return out;
 }
 
 istream &operator>>(istream &in, Entry &entry)
 {
     return entry.read(in);
+}
+
+ifstream &operator>>(ifstream &in, Entry &entry)
+{
+    return entry.read2(in);
 }

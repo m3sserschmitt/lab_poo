@@ -51,7 +51,7 @@ DateRange &DateRange::operator=(const DateRange &range)
     return *this;
 }
 
-ostream &operator<<(ostream &out, const DateRange &range)
+std::ostream &operator<<(std::ostream &out, const DateRange &range)
 {
     if(range.begin == range.end)
     {

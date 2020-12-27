@@ -1,16 +1,18 @@
 #include "./include/util.h"
 
+#include <math.h>
+
 std::vector<std::string> split(std::string str, std::string sep, int max_split)
 {
+    if (!str.size())
+        return {};
+
     std::vector<std::string> tokens;
 
     size_t sep_pos;
     int split_index = 0;
 
-    if (!str.size())
-        return tokens;
-
-    tokens.reserve(10);
+    // tokens.reserve(10);
 
     do
     {
@@ -39,17 +41,33 @@ std::vector<std::string> split(std::string str, std::string sep, int max_split)
     return tokens;
 }
 
-bool is_number(std::string str)
+void strip(std::string &str, std::string chars)
+{
+    size_t start = str.find_first_not_of(chars);
+    size_t end = str.find_last_not_of(chars);
+
+    str = str.substr(start, end - start + 1);
+}
+
+bool is_number(std::string str, int &n)
 {
     if (!str.size())
         return false;
 
-    for (unsigned int i = 0; i < str.size(); i++)
+    n = 0;
+    int s = str.size() - 1;
+
+    for (int i = 0; i <= s ; i ++)
     {
         int c = (int)str[i];
 
         if (c < 48 || c > 57)
+        {
+            n = 0;
             return false;
+        }
+
+        n += (c - 48) * pow(10, s - i);
     }
 
     return true;

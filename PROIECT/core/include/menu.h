@@ -4,8 +4,12 @@
 #include <vector>
 #include <string>
 
-using namespace std;
+void add(vector<std::string> arguments, Notebook &notebook);
 
-void add(vector<string> arguments, Notebook &notebook);
-void list_entries(vector<string> arguments, Notebook &notebook);
-void remove(vector<string> arguments, Notebook &notebook);
+void list_entries(vector<std::string> arguments, Notebook &notebook);
+
+void export_entries(vector<std::string> arguments, Notebook &notebook);
+
+void import_entries(vector<std::string> arguments, Notebook &notebook);
+
+void remove(vector<std::string> arguments, Notebook &notebook);

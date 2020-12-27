@@ -9,6 +9,7 @@
 #include <sstream>
 #include <iomanip>
 #include <iostream>
+#include <map>
 
 using namespace std;
 
@@ -41,7 +42,7 @@ Time::Time(int hours, int minutes, int seconds)
     get_system_timezone(timezone);
 }
 
-Time::~Time(){}
+Time::~Time() {}
 
 int Time::compare(const Time &t) const
 {
@@ -53,7 +54,7 @@ int Time::compare(const Time &t) const
 
 void Time::set_seconds(int seconds)
 {
-    if(seconds < 0 or seconds > 59)
+    if (seconds < 0 or seconds > 59)
     {
         throw InvalidTimeError(TIME_OUT_OF_RANGE);
     }
@@ -63,7 +64,7 @@ void Time::set_seconds(int seconds)
 
 void Time::set_minutes(int minutes)
 {
-    if(minutes < 0 or minutes > 59)
+    if (minutes < 0 or minutes > 59)
     {
         throw InvalidTimeError(TIME_OUT_OF_RANGE);
     }
@@ -73,7 +74,7 @@ void Time::set_minutes(int minutes)
 
 void Time::set_hours(int hours)
 {
-    if(hours < 0 or hours > 23)
+    if (hours < 0 or hours > 23)
     {
         throw InvalidTimeError(TIME_OUT_OF_RANGE);
     }
@@ -83,7 +84,7 @@ void Time::set_hours(int hours)
 
 void Time::set_time(int hours, int minutes, int seconds)
 {
-    if(not check_time(hours, minutes, seconds))
+    if (not check_time(hours, minutes, seconds))
     {
         throw InvalidTimeError(TIME_OUT_OF_RANGE);
     }
@@ -93,9 +94,12 @@ void Time::set_time(int hours, int minutes, int seconds)
     this->seconds = seconds;
 }
 
-void Time::set_time(const char *time)
+void Time::set_time(string time)
 {
-    vector<string> tokens = split(time, ":", 2);
+    vector<string> tokens = split(time, " ", 1);
+    time = tokens[0];
+
+    tokens = split(time, ":", 2);
     size_t n = tokens.size();
 
     if (n != 3 and n != 2)
@@ -103,31 +107,25 @@ void Time::set_time(const char *time)
         throw InvalidTimeError(WRONG_TIME_FORMAT);
     }
 
+    map<int, int> m;
+    m[2] = 0;
+
     for (size_t i = 0; i < n; i++)
     {
-        if (not is_number(tokens[i]))
+        if (not is_number(tokens[i], m[i]))
         {
             throw InvalidTimeError(BAD_TIME_INPUT);
         }
     }
 
-    int h = atoi(tokens[0].c_str());
-    int m = atoi(tokens[1].c_str());
-    int s = 0;
-
-    if (n == 3)
-    {
-        s = atoi(tokens[2].c_str());
-    }
-
-    if (not check_time(h, m, s))
+    if (not check_time(m[0], m[1], m[2]))
     {
         throw InvalidTimeError(TIME_OUT_OF_RANGE);
     }
 
-    this->hours = h;
-    this->minutes = m;
-    this->seconds = s;
+    this->hours = m[0];
+    this->minutes = m[1];
+    this->seconds = m[2];
 }
 
 int Time::get_seconds() const
@@ -156,9 +154,25 @@ void Time::now()
     this->set_time(now.tm_hour, now.tm_min, now.tm_sec);
 }
 
+string Time::to_string() const
+{
+    stringstream ss;
+
+    ss << setfill('0');
+
+    ss << setw(2) << this->get_hours();
+    ss << ":";
+    ss << setw(2) << this->get_minutes();
+    ss << ":";
+    ss << setw(2) << this->get_seconds();
+    ss << " " << this->timezone;
+
+    return ss.str();
+}
+
 Time &Time::operator=(const Time &time)
 {
-    if(this != &time)
+    if (this != &time)
     {
         this->hours = time.hours;
         this->minutes = time.minutes;
@@ -168,26 +182,36 @@ Time &Time::operator=(const Time &time)
     return *this;
 }
 
-ostream &operator<<(ostream &out, const Time &t)
+ostream &operator<<(ostream &out, const Time &time)
 {
-    out << setfill('0');
-
-    out << setw(2) << t.get_hours();
-    out << ":";
-    out << setw(2) << t.get_minutes();
-    out << ":";
-    out << setw(2) << t.get_seconds();
-    out << " " << t.timezone;
+    out << time.to_string();
 
     return out;
 }
 
-istream &operator>>(istream &in, Time &t)
+ofstream &operator<<(ofstream &out, const Time &time)
+{
+    out << time.to_string();
+
+    return out;
+}
+
+istream &operator>>(istream &in, Time &time)
 {
     string input;
     getline(in, input);
 
-    t.set_time(input.c_str());
+    time.set_time(input);
+
+    return in;
+}
+
+ifstream &operator>>(ifstream &in, Time &time)
+{
+    string input;
+    getline(in, input);
+
+    time.set_time(input);
 
     return in;
 }

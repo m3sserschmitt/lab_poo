@@ -1,4 +1,5 @@
 #include <ctime>
+#include <string>
 
 bool check_time(int hours, int minutes, int seconds);
 
@@ -10,4 +11,5 @@ time_t create_time_from_date(int day, int month, int year);
 
 void get_wday(int day, int month, int year, char *wday);
 void get_ymonth(int month, char *ymonth);
+bool get_ymonth(std::string ymonth, int &month);
 void get_system_timezone(char *timezone);

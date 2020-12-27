@@ -1,6 +1,11 @@
 #include "./exceptions/include/exception.h"
 #include "./include/note.h"
 
+#include <fstream>
+#include <map>
+
+using namespace std;
+
 Note::Note() : Entry() {}
 
 Note::Note(std::string name) : Entry(name) {}
@@ -69,15 +74,43 @@ istream &Note::read(istream &in)
     return in;
 }
 
-ostream &Note::show(ostream &out) const
+ifstream &Note::read2(ifstream &in)
 {
-    out << this->name << " for " << this->date;
+    map<string, string> m = {{"Name", ""}, {"Date", ""}, {"Description", ""}};
+
+    this->read_map(in, m);
+
+    this->name = m["Name"];
+    this->date.set_date(m["Date"]);
+    this->description = m["Description"];
+
+    return in;
+}
+
+string Note::to_string() const
+{
+    string str = this->name + " for " + this->date.to_string();
+
     if (this->description.size())
     {
-        out << "\n---> " << this->description;
+        str += "\n---> " + this->description;
     }
 
-    return out;
+    return str;
+}
+
+string Note::to_string2() const
+{
+    string str = "[Note]";
+    str += "\nName: " + this->name;
+    str += "\nDate: " + this->date.to_string();
+
+    if (this->description.size())
+    {
+        str += "\nDescription: " + this->description;
+    }
+
+    return str;
 }
 
 void Note::set_description(string description)

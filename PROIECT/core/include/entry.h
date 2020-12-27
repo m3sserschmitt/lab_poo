@@ -2,20 +2,23 @@
 
 #include "date.h"
 
+#include <map>
+
 #ifndef ENTRY_H
 #define ENTRY_H
 
 class Entry : public Comparable<Entry>
 {
 protected:
-    Date date;
 
+    Date date;
     std::string name;
 
-    virtual istream &read(istream &in) = 0;
-    virtual ostream &show(ostream &out) const = 0;
+    virtual std::istream &read(std::istream &) = 0;
+    virtual std::ifstream &read2(std::ifstream &) = 0;
 
 public:
+
     Entry();
     Entry(std::string name);
     Entry(const Entry &entry);
@@ -30,11 +33,19 @@ public:
 
     Date get_date() const;
 
+    virtual std::string to_string() const = 0;
+    virtual std::string to_string2() const = 0;
+
+    static void read_map(std::ifstream &in, std::map<std::string, std::string> &m);
+
     friend bool operator==(const Entry &, const Entry &);
     friend bool operator!=(const Entry &, const Entry &);
 
-    friend ostream &operator<<(ostream &, const Entry &);
-    friend istream &operator>>(istream &, Entry &);
+    friend std::ostream &operator<<(std::ostream &, const Entry &);
+    friend std::ofstream &operator<<(std::ofstream &, const Entry &);
+
+    friend std::istream &operator>>(std::istream &, Entry &);
+    friend std::ifstream &operator>>(std::ifstream &, Entry &);
 };
 
 #endif

@@ -3,9 +3,9 @@
 
 #include "../../data_structures/abstract/comparable.h"
 
+#include <fstream>
 #include <iostream>
-
-using namespace std;
+#include <string>
 
 class Time : public Comparable<Time>
 {
@@ -30,7 +30,7 @@ public:
     void set_hours(int hours);
 
     void set_time(int hours, int minutes, int seconds = 0);
-    void set_time(const char *time);
+    void set_time(std::string time);
 
     int get_seconds() const;
     int get_minutes() const;
@@ -38,11 +38,15 @@ public:
     static const char *get_timezone();
 
     void now();
+    std::string to_string() const;
 
     Time &operator=(const Time &);
 
-    friend ostream &operator<<(ostream &, const Time &);
-    friend istream &operator>>(istream &, Time &);
+    friend std::ostream &operator<<(std::ostream &, const Time &);
+    friend std::ofstream &operator<<(std::ofstream &, const Time &);
+
+    friend std::istream &operator>>(std::istream &, Time &);
+    friend std::ifstream &operator>>(std::ifstream &, Time &);
 };
 
 #endif

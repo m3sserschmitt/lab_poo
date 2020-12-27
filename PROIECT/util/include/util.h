@@ -3,4 +3,6 @@
 
 std::vector<std::string> split(std::string str, std::string sep, int max_split);
 
-bool is_number(std::string str);
+void strip(std::string &str, std::string chars);
+
+bool is_number(std::string str, int &n);

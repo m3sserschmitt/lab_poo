@@ -22,7 +22,7 @@ public:
 
     DateRange &operator=(const DateRange &);
 
-    friend ostream &operator<<(ostream &, const DateRange &);
+    friend std::ostream &operator<<(std::ostream &, const DateRange &);
 };
 
 #endif

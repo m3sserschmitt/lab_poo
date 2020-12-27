@@ -3,6 +3,11 @@
 #include "./include/note.h"
 
 #include "./include/event.h"
+#include "../util/include/util.h"
+
+#include <map>
+
+using namespace std;
 
 Event::Event()
 {
@@ -59,11 +64,32 @@ istream &Event::read(istream &in)
     return in;
 }
 
-ostream &Event::show(ostream &out) const
+ifstream &Event::read2(ifstream &in)
 {
-    out << this->name << " on " << this->date << " " << this->time;
+    map<string, string> m = {{"Name", ""}, {"Date", ""}, {"Time", ""}};
+    
+    this->read_map(in, m);
+    
+    this->name = m["Name"];
+    this->date.set_date(m["Date"]);
+    this->time.set_time(m["Time"]);
 
-    return out;
+    return in;
+}
+
+string Event::to_string() const
+{
+    return this->name + " on " + this->date.to_string() + " " + this->time.to_string();
+}
+
+string Event::to_string2() const
+{
+    string str = "[Event]";
+    str += "\nName: " + this->name;
+    str += "\nDate: " + this->date.to_string();
+    str += "\nTime: " + this->time.to_string();
+
+    return str;
 }
 
 int Event::compare(const Entry &e) const
