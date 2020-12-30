@@ -4,6 +4,8 @@
 
 Aplicatia este un notebook in care se pot introduce evenimente ce sunt ordonate dupa data.
 
+### Update, etapa III:
+
 ### Update, etapa II:
 
 S-au facut urmatoarele modificari:
