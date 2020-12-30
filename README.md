@@ -2,7 +2,7 @@
 
 ## PROIECT
 
-Aplicatia este un notebook in care se pot introduce evenimente ce sunt ordonate dupa data.
+Aplicația este un notebook in care se pot introduce evenimente ce sunt ordonate dupa data.
 
 ### Update, etapa II:
 
