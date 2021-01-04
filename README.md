@@ -8,6 +8,17 @@ Aplicația este un notebook în care se pot introduce evenimente ce sunt ordonat
 
 ___
 
+### Update, Design Pattern: Singleton.
+
+Având în vedere că în aplicație se folosește o __*singură instanță*__ a clasei `Notebook`, are sens modificarea sa în vederea implementării unui *singleton*.
+
+Modificările sunt după cum urmează:
+
+* în `core/include/notebook.h` s-a modificat definiția clasei astel încât toți contructorii și operatorul de atribuire sunt acum declarate __*private*__.
+* s-a adăugat metoda statică `getHandle`, care atunci când este apelată crează static o instanță `Notebook` și returnează o referință la aceasta (`/core/notebook.cc`, linia 25).
+* în meniul principal, se apelează metoda `getHandle` pentru a obține o referință la unicul obiect `Notebook` (`main.cc`, linia 25).
+___
+
 ### Update, etapa III:
 
 __Structura finală__:
