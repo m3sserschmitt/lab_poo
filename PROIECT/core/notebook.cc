@@ -22,6 +22,13 @@ Notebook::Notebook(const Notebook &n)
     this->set_data(n.data, n.current_size);
 }
 
+Notebook &Notebook::getHandle()
+{
+    static Notebook notebook;
+
+    return notebook;
+}
+
 void Notebook::add(Entry *entry)
 {
     if (not this->current_size)

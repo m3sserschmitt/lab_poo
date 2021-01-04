@@ -11,11 +11,15 @@
 
 class Notebook: public PriorityQueue<Entry *>
 {
-public:
     Notebook();
     Notebook(size_t size);
     Notebook(const Notebook &notebook);
 
+    Notebook &operator=(const Notebook &);
+
+public:
+    static Notebook &getHandle();
+    
     void add(Entry *entry);
     void remove(size_t index);
 
@@ -24,8 +28,6 @@ public:
 
     std::list<Entry *> list(Date date) const;
     std::list<Entry *> list(DateRange range) const;
-
-    Notebook &operator=(const Notebook &);
 
     friend Notebook &operator<<(Notebook &, Entry &);
     friend std::ostream &operator<<(std::ostream &, const Notebook &);

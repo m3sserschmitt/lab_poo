@@ -22,7 +22,8 @@ using namespace std;
 void menu()
 {
     string input;
-    Notebook notebook;
+    Notebook &notebook = Notebook::getHandle();
+    
     vector<string> arguments;
 
     do
